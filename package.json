@@ -1,0 +1,38 @@
+{
+  "name": "geovis",
+  "version": "0.0.0",
+  "description": "GeoVis",
+  "main": "lib/index.js",
+  "config": {
+    "component": "GeoVis"
+  },
+  "scripts": {
+    "start": "react-component-template",
+    "test": "npm start test",
+    "precommit": "npm start precommit",
+    "prepush": "npm start prepush",
+    "postversion": "npm start postversion",
+    "prepublish": "npm start prepublish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nkbt/geovis.git"
+  },
+  "keywords": [
+    "component",
+    "react-component",
+    "react"
+  ],
+  "author": "Nik Butenko <nik@butenko.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nkbt/geovis/issues"
+  },
+  "homepage": "https://github.com/nkbt/geovis",
+  "peerDependencies": {
+    "react": "^0.14 || ^15"
+  },
+  "devDependencies": {
+    "react-component-template": "0.1.5"
+  }
+}

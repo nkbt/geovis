@@ -1,0 +1,1 @@
+export {GeoVis} from './Component';

@@ -1,0 +1,35 @@
+{
+  "name": "geovis",
+  "version": "0.0.0",
+  "description": "GeoVis",
+  "main": [
+    "build/geovis.js",
+    "build/geovis.js.map",
+    "build/geovis.min.js",
+    "build/geovis.min.js.map"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nkbt/geovis.git"
+  },
+  "keywords": [
+    "component",
+    "react-component",
+    "react"
+  ],
+  "authors": [
+    "Nik Butenko <nik@butenko.me>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/nkbt/geovis",
+  "dependencies": {
+    "react": "^0.14 || ^15"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
