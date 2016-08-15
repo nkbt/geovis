@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './reset.css';
+
 import App from './App';
 
 const appRoot = document.createElement('div');
