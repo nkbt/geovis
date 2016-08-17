@@ -40,6 +40,7 @@
   "dependencies": {
     "react": "15.3.0",
     "react-addons-pure-render-mixin": "15.3.0",
-    "three": "0.79.0"
+    "three": "0.79.0",
+    "three-orbit-controls": "72.0.0"
   }
 }
