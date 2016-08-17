@@ -33,7 +33,9 @@
     "react": "^0.14 || ^15"
   },
   "devDependencies": {
-    "react-component-template": "0.1.5"
+    "file-loader": "0.9.0",
+    "react-component-template": "0.1.5",
+    "url-loader": "0.5.7"
   },
   "dependencies": {
     "react": "15.3.0",
