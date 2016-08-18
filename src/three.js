@@ -14,6 +14,8 @@
 import THREE from 'three';
 import orbitControls from 'three-orbit-controls';
 import world from './world.png';
+import arc from 'geo-arc';
+
 
 const OrbitControls = orbitControls(THREE);
 
@@ -82,6 +84,40 @@ const earth = () => {
 };
 
 
+const spline = () => {
+  const arcData = arc({
+    cellSize: 2, // 1 == points, 2 == lines, 3 == triangles
+    x: 0, // x position of the center of the arc
+    y: 0, // y position of the center of the arc
+    z: 0, // z position of the center of the arc
+    startRadian: 0, // start radian for the arc
+    endRadian: 1.5, // end radian for the arc
+    innerRadius: 250, // inner radius of the arc
+    outerRadius: 250, // outside radius of the arc
+    numBands: 1, // subdivision from inside out
+    numSlices: 40, // subdivision along curve
+    drawOutline: true // if cellSize == 2 draw only the outside of the shape
+  });
+
+  console.log(`arcData`, arcData)
+
+  const points = arcData.positions
+//    .filter((_, i) => i % 2 === 0)
+    .map(([x, y, z]) => new THREE.Vector3(x, y, z));
+  console.log(`points`, points)
+
+  const curve = new THREE.SplineCurve3(points);
+
+  const geometry = new THREE.Geometry();
+  geometry.vertices = curve.getPoints(50);
+
+  const material = new THREE.LineBasicMaterial({color: 0x00ff00, linewidth: 5});
+
+  // Create the final Object3d to add to the scene
+  return new THREE.Line(geometry, material);
+};
+
+
 const atmo = () => {
   const uniforms = THREE.UniformsUtils.clone(shaders.atmosphere.uniforms);
   const material = new THREE.ShaderMaterial({
@@ -116,9 +152,12 @@ export const run = ({canvas}) => {
   controls.enableDamping = true;
 
 
-  const mesh = earth();
-  scene.add(mesh);
-  scene.add(atmo());
+//  const mesh = earth();
+//  scene.add(mesh);
+//  scene.add(atmo());
+
+  const line = spline();
+  scene.add(line);
 
   const renderer = new THREE.WebGLRenderer({canvas, antialias: true});
   renderer.setSize(window.innerWidth, window.innerHeight);
