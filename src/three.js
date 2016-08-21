@@ -2,63 +2,34 @@ import THREE from 'three';
 import orbitControls from 'three-orbit-controls';
 import LatLon from 'geodesy/latlon-spherical';
 import {EARTH_RADIUS, earth, atmo} from './globe';
+import {arc} from './arc';
+import {toVector} from './toVector';
 
 
 const OrbitControls = orbitControls(THREE);
 
 
-// Using 30 midpoints + start + end for arc
-const midpoints = (new Array(31)).join('.').split('.')
-  .map((_, i) => (i + 1) / 31).slice(0, 30);
-
-
-const toVector = (R = EARTH_RADIUS) => point => {
-  const phi = (90 - point.lat) * Math.PI / 180;
-  const theta = (180 - point.lon) * Math.PI / 180;
-  const x = R * Math.sin(phi) * Math.cos(theta);
-  const y = R * Math.cos(phi);
-  const z = R * Math.sin(phi) * Math.sin(theta);
-
-  return new THREE.Vector3(x, y, z);
-};
-
-
-const toVectorAboveEarth = toVector(EARTH_RADIUS * 1.05);
 const toVectorOnEarth = toVector(EARTH_RADIUS);
 
 
+const DARWIN = new LatLon(-12.462827, 130.841782);
 const SYD = new LatLon(-33.865143, 151.209900);
 const NY = new LatLon(40.730610, -73.935242);
+const LONDON = new LatLon(51.509865, -0.118092);
+const VANCOUVER = new LatLon(49.246292, -123.116226);
+const MOSCOW = new LatLon(55.751244, 37.618423);
+const KYIV = new LatLon(50.411198, 30.446634);
 
-const attack = (from, to) => {
-  const points = [toVectorOnEarth(from)]
-    .concat(midpoints
-    //      .slice(5, midpoints.length - 5)
-      .map(p => from.intermediatePointTo(to, p))
-      .map(toVectorAboveEarth))
-    .concat([toVectorOnEarth(to)]);
 
-  const curve = new THREE.CatmullRomCurve3(points);
-
-  const geometry = new THREE.Geometry();
-  geometry.vertices = curve.getPoints(50);
-
-  const material = new THREE.LineBasicMaterial({
-    color: 0x00ff00,
-    linewidth: 20
-//    linejoin: 'miter'
-  });
-
-  return new THREE.Line(geometry, material);
-};
+const attack = arc({EARTH_RADIUS, POINTS: 9});
 
 
 export const run = ({canvas}) => {
   const scene = new THREE.Scene();
 
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 5000);
-  camera.position.copy(toVector(EARTH_RADIUS * 4)(new LatLon(-122, 48)));
-  camera.lookAt(toVectorOnEarth(new LatLon(-122, 48)));
+  camera.position.copy(toVector(EARTH_RADIUS * 4)(SYD));
+  camera.lookAt(toVectorOnEarth(SYD));
 
   const controls = new OrbitControls(camera, canvas);
   controls.minDistance = 350;
@@ -72,8 +43,12 @@ export const run = ({canvas}) => {
   scene.add(mesh);
   scene.add(atmo());
 
-  const line = attack(SYD, NY);
-  scene.add(line);
+  scene.add(attack(SYD, NY));
+  scene.add(attack(SYD, DARWIN));
+  scene.add(attack(KYIV, MOSCOW));
+  scene.add(attack(VANCOUVER, NY));
+  scene.add(attack(MOSCOW, VANCOUVER));
+  scene.add(attack(LONDON, NY));
 
   const renderer = new THREE.WebGLRenderer({canvas, antialias: true});
   renderer.setSize(window.innerWidth, window.innerHeight);
