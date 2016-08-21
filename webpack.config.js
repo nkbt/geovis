@@ -25,7 +25,7 @@ const loaders = [
     loader: 'babel',
     include: [pathTo('src')]
   },
-  {test: /\.png$/, loader: 'file?name=[name].[ext]', include: [pathTo('src')]}
+  {test: /\.(png|jpg)$/, loader: 'file?name=[name].[ext]', include: [pathTo('src')]}
 ];
 
 
