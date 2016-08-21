@@ -78,7 +78,8 @@ const ghPages = {
 
 
 const dist = {
-  devtool: '#source-map',
+//  devtool: '#source-map',
+  devtool: 'none',
   entry: pathTo('src', 'index.js'),
   output: {
     filename: `${require(pathTo('package.json')).name}.js`,
@@ -86,11 +87,38 @@ const dist = {
     library: COMPONENT_NAME,
     libraryTarget: 'umd'
   },
-  plugins: [definePlugin],
-  module: {loaders},
+  plugins: [
+    definePlugin,
+    new webpack.optimize.UglifyJsPlugin({
+      compress: true,
+      mangle: false,
+      beautify: true,
+      comments: true,
+      sourceMap: false,
+
+
+//      debug: true,
+//      minimize: false,
+//      sourceMap: false,
+//      output: {
+//        comments: false
+//      },
+      compressor: {
+        warnings: false
+      }
+    })
+  ],
+  module: {loaders: [
+    {
+      test: /\.js$/,
+      loaders: ['rollup'],
+      include: [pathTo('src')]
+    }
+  ].concat(loaders)},
   resolve,
   stats,
   externals: {
+    three: {root: 'THREE', commonjs2: 'three', commonjs: 'three', amd: 'three'},
     react: {root: 'React', commonjs2: 'react', commonjs: 'react', amd: 'react'}
   }
 };
