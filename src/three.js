@@ -13,13 +13,11 @@ const midpoints = (new Array(31)).join('.').split('.')
 
 
 const toVector = (R = EARTH_RADIUS) => point => {
-  const p = point.lat.toRadians();
-  const l = point.lon.toRadians();
-
-  // right-handed vector: x -> 0°E,0°N; y -> 90°E,0°N, z -> 90°N
-  const x = R * Math.cos(p) * Math.cos(l);
-  const y = R * Math.cos(p) * Math.sin(l);
-  const z = R * Math.sin(p);
+  const phi = (90 - point.lat) * Math.PI / 180;
+  const theta = (180 - point.lon) * Math.PI / 180;
+  const x = R * Math.sin(phi) * Math.cos(theta);
+  const y = R * Math.cos(phi);
+  const z = R * Math.sin(phi) * Math.sin(theta);
 
   return new THREE.Vector3(x, y, z);
 };
