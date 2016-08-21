@@ -1,24 +1,35 @@
 import THREE from 'three';
 import orbitControls from 'three-orbit-controls';
-import LatLon from 'geodesy/latlon-spherical';
-import {EARTH_RADIUS, earth, atmo} from './globe';
 import {arc} from './arc';
 import {toVector} from './toVector';
+
+import {globe} from './vectorGlobe';
+//function draw_world(err, world) {
+//  if (err) return
+//
+//  webgl
+//    .append("path")
+//    .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a == b && a.id !== 10 }))
+//    .attr({ class: 'world'
+//      , d: path
+//      , fill: 'grey'
+//    })
+//}
+
+
+const EARTH_RADIUS = 200;
 
 
 const OrbitControls = orbitControls(THREE);
 
 
-const toVectorOnEarth = toVector(EARTH_RADIUS);
-
-
-const DARWIN = new LatLon(-12.462827, 130.841782);
-const SYD = new LatLon(-33.865143, 151.209900);
-const NY = new LatLon(40.730610, -73.935242);
-const LONDON = new LatLon(51.509865, -0.118092);
-const VANCOUVER = new LatLon(49.246292, -123.116226);
-const MOSCOW = new LatLon(55.751244, 37.618423);
-const KYIV = new LatLon(50.411198, 30.446634);
+const SYD = [-33.865143, 151.209900];
+const DARWIN = [-12.462827, 130.841782];
+const NY = [40.730610, -73.935242];
+const LONDON = [51.509865, -0.118092];
+const VANCOUVER = [49.246292, -123.116226];
+const MOSCOW = [55.751244, 37.618423];
+const KYIV = [50.411198, 30.446634];
 
 
 const attack = arc({EARTH_RADIUS, POINTS: 9});
@@ -28,8 +39,8 @@ export const run = ({canvas}) => {
   const scene = new THREE.Scene();
 
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 5000);
-  camera.position.copy(toVector(EARTH_RADIUS * 4)(SYD));
-  camera.lookAt(toVectorOnEarth(SYD));
+  camera.position.copy(toVector(SYD).multiplyScalar(EARTH_RADIUS * 4));
+  camera.lookAt(toVector(SYD).multiplyScalar(EARTH_RADIUS));
 
   const controls = new OrbitControls(camera, canvas);
   controls.minDistance = 350;
@@ -39,9 +50,9 @@ export const run = ({canvas}) => {
   controls.enablePan = false;
   controls.enableDamping = true;
 
-  const mesh = earth();
-  scene.add(mesh);
-  scene.add(atmo());
+
+  globe({EARTH_RADIUS}).map(mesh => scene.add(mesh));
+//  scene.add(atmo());
 
   scene.add(attack(SYD, NY));
   scene.add(attack(SYD, DARWIN));

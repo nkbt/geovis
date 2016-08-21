@@ -35,6 +35,7 @@
   "devDependencies": {
     "file-loader": "0.9.0",
     "react-component-template": "0.1.5",
+    "rollup-loader": "0.0.2",
     "url-loader": "0.5.7"
   },
   "dependencies": {
@@ -42,6 +43,7 @@
     "react": "15.3.0",
     "react-addons-pure-render-mixin": "15.3.0",
     "three": "0.79.0",
-    "three-orbit-controls": "72.0.0"
+    "three-orbit-controls": "72.0.0",
+    "topojson": "1.6.26"
   }
 }
