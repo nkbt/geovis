@@ -13,12 +13,12 @@ export const arc = ({EARTH_RADIUS, POINTS}) => {
   return (from, to) => {
     const dist = distance(from, to, EARTH_RADIUS);
     const maxElevation = maxElevationCoefficient * dist;
-    const toElevatedVector = elevationCoefficients
-      .map(e => toVector(e * maxElevation + EARTH_RADIUS));
+    const elevations = elevationCoefficients
+      .map(e => e * maxElevation + EARTH_RADIUS);
 
     const points = midpoints
       .map(p => intermediatePoint(from, to, p))
-      .map((p, i) => toElevatedVector[i](p));
+      .map((p, i) => toVector(p).multiplyScalar(elevations[i]));
 
 
     const curve = new THREE.CatmullRomCurve3(points);

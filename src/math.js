@@ -1,3 +1,5 @@
+import THREE from 'three';
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 /* Latitude/longitude spherical geodesy tools                         (c) Chris Veness 2002-2016  */
 /*                                                                                   MIT Licence  */
@@ -6,8 +8,8 @@
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
 
-export const toDeg = rad => rad * 180 / Math.PI;
-export const toRad = deg => deg * Math.PI / 180;
+const toDeg = THREE.Math.radToDeg;
+const toRad = THREE.Math.degToRad;
 
 /**
  * Converts point to Vector3d n-vector (normal to earth's surface).
@@ -18,19 +20,43 @@ export const toRad = deg => deg * Math.PI / 180;
  *   const p = new LatLon(45, 45);
  *   const v = p.toVector(); // [0.5000,0.5000,0.7071]
  */
-const toVector = point => {
-  const φ = toRad(point[0]);
-  const λ = toRad(point[1]);
+const toVector = ([lat, lng]) => {
+  //flips the Y axis
+  lat  = Math.PI / 2 - lat;
 
-  const x = Math.cos(φ) * Math.cos(λ);
-  const y = Math.cos(φ) * Math.sin(λ);
-  const z = Math.sin(φ);
 
+//  lat = PI / 2 - lat;
+
+  //distribute to sphere
+    const x =  Math.sin( lat ) * Math.sin( lng );
+    const y =  Math.cos( lat );
+    const z =  Math.sin( lat ) * Math.cos( lng );
+
+
+
+//
+//  var cosLat = Math.cos(lat * Math.PI / 180.0);
+//  var sinLat = Math.sin(lat * Math.PI / 180.0);
+//  var cosLon = Math.cos(lon * Math.PI / 180.0);
+//  var sinLon = Math.sin(lon * Math.PI / 180.0);
+//  const x = cosLat * cosLon;
+//  const y = cosLat * sinLon;
+//  const z = sinLat;
+
+
+//  const φ = toRad(point[0]);
+//  const λ = toRad(point[1]);
+//
+//  const x = Math.cos(φ) * Math.cos(λ);
+//  const y = Math.cos(φ) * Math.sin(λ);
+//  const z = Math.sin(φ);
+//
   return [x, y, z];
 };
 
 
 export const vector = radius => point => {
+//  console.log(`point`, point)
   const [x, y, z] = toVector(point);
   return [x * radius, y * radius, z * radius];
 };

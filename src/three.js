@@ -23,11 +23,8 @@ const EARTH_RADIUS = 200;
 const OrbitControls = orbitControls(THREE);
 
 
-const toVectorOnEarth = toVector(EARTH_RADIUS);
-
-
-const DARWIN = [-12.462827, 130.841782];
 const SYD = [-33.865143, 151.209900];
+const DARWIN = [-12.462827, 130.841782];
 const NY = [40.730610, -73.935242];
 const LONDON = [51.509865, -0.118092];
 const VANCOUVER = [49.246292, -123.116226];
@@ -42,8 +39,8 @@ export const run = ({canvas}) => {
   const scene = new THREE.Scene();
 
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 5000);
-  camera.position.copy(toVector(EARTH_RADIUS * 4)(SYD));
-  camera.lookAt(toVectorOnEarth(SYD));
+  camera.position.copy(toVector(SYD).multiplyScalar(EARTH_RADIUS * 4));
+  camera.lookAt(toVector(SYD).multiplyScalar(EARTH_RADIUS));
 
   const controls = new OrbitControls(camera, canvas);
   controls.minDistance = 350;
