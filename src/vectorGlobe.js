@@ -9,9 +9,9 @@ const countries = topojson.feature(world, world.objects.countries).features;
 export const globe = ({EARTH_RADIUS}) => {
   const sphere = () => new THREE.Mesh(
     new THREE.SphereGeometry(EARTH_RADIUS, 40, 30),
-    new THREE.MeshBasicMaterial({color: 0x222222, wireframe: true}));
+    new THREE.MeshBasicMaterial({color: 0x111111, wireframe: true}));
 
-  const material = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 2});
+  const material = new THREE.LineBasicMaterial({color: 0x666666, linewidth: 1});
 
   const threeCountry = country => {
     const points = country
