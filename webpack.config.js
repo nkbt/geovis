@@ -52,12 +52,7 @@ const development = {
     new HtmlWebpackPlugin(),
     definePlugin
   ],
-  module: {
-    loaders,
-    preLoaders: [
-      {test: /\.js$/, loader: 'eslint', include: [pathTo('src')]}
-    ]
-  },
+  module: {loaders},
   resolve,
   stats,
   devServer: {

@@ -14,7 +14,7 @@
 import THREE from 'three';
 import orbitControls from 'three-orbit-controls';
 import world from './world.png';
-import arc from 'geo-arc';
+import LatLon from 'geodesy/latlon-spherical';
 
 
 const OrbitControls = orbitControls(THREE);
@@ -84,7 +84,7 @@ const earth = () => {
 };
 
 
-const spline = () => {
+const spline1 = () => {
   const arcData = arc({
     cellSize: 2, // 1 == points, 2 == lines, 3 == triangles
     x: 0, // x position of the center of the arc
@@ -99,19 +99,16 @@ const spline = () => {
     drawOutline: true // if cellSize == 2 draw only the outside of the shape
   });
 
-  console.log(`arcData`, arcData)
-
   const points = arcData.positions
-//    .filter((_, i) => i % 2 === 0)
+  //    .filter((_, i) => i % 2 === 0)
     .map(([x, y, z]) => new THREE.Vector3(x, y, z));
-  console.log(`points`, points)
 
-  const curve = new THREE.SplineCurve3(points);
+  const curve = new THREE.CatmullRomCurve3(points);
 
   const geometry = new THREE.Geometry();
   geometry.vertices = curve.getPoints(50);
 
-  const material = new THREE.LineBasicMaterial({color: 0x00ff00, linewidth: 5});
+  const material = new THREE.LineBasicMaterial({color: 0x00ff00, linewidth: 20});
 
   // Create the final Object3d to add to the scene
   return new THREE.Line(geometry, material);
@@ -138,10 +135,54 @@ const atmo = () => {
 };
 
 
+// Using 30 midpoints + start + end for arc
+const midpoints = (new Array(31)).join('.').split('.')
+  .map((_, i) => (i + 1) / 31).slice(0, 30);
+
+
+const EARTH_RADIUS = 200;
+
+const toVector = (R = EARTH_RADIUS) => point => {
+  const p = point.lat.toRadians();
+  const l = point.lon.toRadians();
+
+  // right-handed vector: x -> 0°E,0°N; y -> 90°E,0°N, z -> 90°N
+  const x = R * Math.cos(p) * Math.cos(l);
+  const y = R * Math.cos(p) * Math.sin(l);
+  const z = R * Math.sin(p);
+
+  return new THREE.Vector3(x, y, z);
+};
+
+
+const toVectorAboveEarth = toVector(220);
+
+
+const attack = () => {
+  const start = new LatLon(-122, 48);
+  const end = new LatLon(-77, 39);
+  const points = midpoints
+    .map(p => start.intermediatePointTo(end, p))
+    .map(toVectorAboveEarth);
+
+  const curve = new THREE.CatmullRomCurve3(points);
+
+  const geometry = new THREE.Geometry();
+  geometry.vertices = curve.getPoints(50);
+
+  const material = new THREE.LineBasicMaterial({color: 0x00ff00, linewidth: 20});
+
+  return new THREE.Line(geometry, material);
+};
+
+
 export const run = ({canvas}) => {
   const scene = new THREE.Scene();
 
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 5000);
+  camera.position.set(toVector(500)(-122, 48));
+//   camera.position.set(0, 1, -3);
+  camera.lookAt(toVector()(-122, 48));
 
   const controls = new OrbitControls(camera, canvas);
   controls.minDistance = 350;
@@ -150,13 +191,15 @@ export const run = ({canvas}) => {
   controls.rotateSpeed = 0.1;
   controls.enablePan = false;
   controls.enableDamping = true;
+//   setTimeout(() => controls.constraint.dollyOut(5));
 
+  const mesh = earth();
+  scene.add(mesh);
+  scene.add(atmo());
 
-//  const mesh = earth();
-//  scene.add(mesh);
-//  scene.add(atmo());
+//   setTimeout(() => controls.zoom = 1000, 50);
 
-  const line = spline();
+  const line = attack();
   scene.add(line);
 
   const renderer = new THREE.WebGLRenderer({canvas, antialias: true});
