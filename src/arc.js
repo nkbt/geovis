@@ -8,11 +8,11 @@ export const arc = ({EARTH_RADIUS, POINTS}) => {
 
 
   const elevationCoefficients = midpoints.map(p => p === 1 ? 0 : Math.sin(Math.PI * p));
-  const maxElevationCoefficient = EARTH_RADIUS / (2 * Math.PI * EARTH_RADIUS) / 2;
+  const maxElevationCoefficient = 15 / Math.PI;
 
   return (from, to) => {
     const dist = distance(from, to, EARTH_RADIUS);
-    const maxElevation = maxElevationCoefficient * dist;
+    const maxElevation = Math.sqrt(maxElevationCoefficient * dist);
     const elevations = elevationCoefficients
       .map(e => e * maxElevation + EARTH_RADIUS);
 

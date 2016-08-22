@@ -9,15 +9,18 @@ const countries = topojson.feature(world, world.objects.countries).features;
 export const globe = ({EARTH_RADIUS}) => {
   const sphere = () => new THREE.Mesh(
     new THREE.SphereGeometry(EARTH_RADIUS, 40, 30),
-    new THREE.MeshBasicMaterial({color: 0x111111, wireframe: true}));
+    new THREE.MeshBasicMaterial({
+      color: 0x111111,
+      wireframe: true
+    }));
 
-  const material = new THREE.LineBasicMaterial({color: 0x666666, linewidth: 1});
+  const material = new THREE.LineBasicMaterial({color: 0x666666, linewidth: 2});
 
   const threeCountry = country => {
     const points = country
       .map(([lon, lat]) => [lat, lon])
       .map(toVector)
-      .map(v => v.multiplyScalar(EARTH_RADIUS + 2));
+      .map(v => v.multiplyScalar(EARTH_RADIUS));
 
     const curve = new THREE.CatmullRomCurve3(points);
     curve.closed = true;
