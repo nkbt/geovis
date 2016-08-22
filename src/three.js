@@ -61,8 +61,7 @@ export const run = ({canvas}) => {
   scene.add(attack(MOSCOW, VANCOUVER));
   scene.add(attack(LONDON, NY));
 
-  const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: true});
-  renderer.setClearColor(0x000000, 0);
+  const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: false});
   renderer.setSize(window.innerWidth, window.innerHeight);
 
 
