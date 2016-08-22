@@ -50,4 +50,5 @@ table {
 html, body {
   overflow: hidden;
   cursor: default;
+  background-color: #000;
 }
