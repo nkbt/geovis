@@ -2,19 +2,7 @@ import THREE from 'three';
 import orbitControls from 'three-orbit-controls';
 import {arc} from './arc';
 import {toVector} from './toVector';
-
-import {globe} from './vectorGlobe';
-//function draw_world(err, world) {
-//  if (err) return
-//
-//  webgl
-//    .append("path")
-//    .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a == b && a.id !== 10 }))
-//    .attr({ class: 'world'
-//      , d: path
-//      , fill: 'grey'
-//    })
-//}
+import {globe} from './globe';
 
 
 const EARTH_RADIUS = 200;
@@ -50,9 +38,7 @@ export const run = ({canvas}) => {
   controls.enablePan = false;
   controls.enableDamping = true;
 
-
   globe({EARTH_RADIUS}).map(mesh => scene.add(mesh));
-//  scene.add(atmo());
 
   scene.add(attack(SYD, NY));
   scene.add(attack(SYD, DARWIN));

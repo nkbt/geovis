@@ -4,14 +4,19 @@ import world from './world-110m.json';
 import {toVector} from './toVector';
 
 
-const countries = topojson.feature(world, world.objects.countries).features;
+const countries = topojson
+  .feature(world, world.objects.countries)
+  .features;
+
 
 export const globe = ({EARTH_RADIUS}) => {
   const sphere = () => new THREE.Mesh(
     new THREE.SphereGeometry(EARTH_RADIUS, 40, 30),
     new THREE.MeshBasicMaterial({
-      color: 0x111111,
-      wireframe: true
+      color: 0x000000,
+      transparent: true,
+      opacity: 0.8,
+      wireframe: false
     }));
 
   const material = new THREE.LineBasicMaterial({color: 0x666666, linewidth: 2});
@@ -44,6 +49,4 @@ export const globe = ({EARTH_RADIUS}) => {
         return null;
       },
       [sphere()]);
-
-//  return [sphere()].concat(countries.map(threeCountry));
 };
