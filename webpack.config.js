@@ -67,11 +67,33 @@ const development = {
 
 
 const ghPages = {
-  devtool: '#source-map',
+  devtool: 'none',
   entry: pathTo('src', 'example', 'Example.js'),
   output: {filename: 'bundle.js', path: pathTo('example')},
-  plugins: [new HtmlWebpackPlugin(), definePlugin],
-  module: {loaders},
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'GeoVis'
+    }),
+    definePlugin,
+    new webpack.optimize.UglifyJsPlugin({
+      compress: true,
+      mangle: true,
+      beautify: false,
+      comments: false,
+      sourceMap: false,
+      compressor: {
+        warnings: false
+      }
+    })
+  ],
+  module: {loaders: [
+    {
+      test: /\.js$/,
+      loaders: ['rollup'],
+      include: [pathTo('src')]
+    }
+  ].concat(loaders)},
   resolve,
   stats
 };
@@ -95,14 +117,6 @@ const dist = {
       beautify: true,
       comments: true,
       sourceMap: false,
-
-
-//      debug: true,
-//      minimize: false,
-//      sourceMap: false,
-//      output: {
-//        comments: false
-//      },
       compressor: {
         warnings: false
       }
