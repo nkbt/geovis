@@ -1,10 +1,12 @@
 import React from 'react';
-import {shouldComponentUpdate} from 'react-addons-pure-render-mixin';
 import {run} from './three';
 
 
 export const GeoVis = React.createClass({
-  propTypes: {},
+  propTypes: {
+    width: React.PropTypes.number.isRequired,
+    height: React.PropTypes.number.isRequired
+  },
 
 
   componentWillMount() {
@@ -12,14 +14,26 @@ export const GeoVis = React.createClass({
   },
 
 
+  shouldComponentUpdate() {
+    return false;
+  },
+
+
   componentDidMount() {
     if (this.ref) {
-      run({canvas: this.ref});
+      const {width, height} = this.props;
+      console.log(`{width, height}`, {width, height})
+      const {onResize} = run({canvas: this.ref, width, height});
+      this.onResize = onResize;
     }
   },
 
 
-  shouldComponentUpdate,
+  componentWillReceiveProps({width, height}) {
+    if (this.ref && this.onResize) {
+      this.onResize({width, height});
+    }
+  },
 
 
   onRef(ref) {

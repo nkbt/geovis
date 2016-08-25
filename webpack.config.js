@@ -17,7 +17,7 @@ const loaders = [
   {
     test: /\.css$/,
     loader: 'style!css?sourceMap&modules&localIdentName=[path][name]---[local]',
-    include: [pathTo('src', 'example')]
+    include: [pathTo('src')]
   },
   {test: /\.json$/, loader: 'json'},
   {
