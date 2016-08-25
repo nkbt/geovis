@@ -39,6 +39,7 @@
     "url-loader": "0.5.7"
   },
   "dependencies": {
+    "d3": "4.2.2",
     "geodesy": "1.1.1",
     "react": "15.3.0",
     "react-element-resize": "0.1.3",

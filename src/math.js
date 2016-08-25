@@ -21,17 +21,16 @@ const toRad = THREE.Math.degToRad;
  *   const v = p.toVector(); // [0.5000,0.5000,0.7071]
  */
 const toVector = ([lat, lng]) => {
-  //flips the Y axis
-  lat  = Math.PI / 2 - lat;
+  // flips the Y axis
+  lat = Math.PI / 2 - lat;
 
 
 //  lat = PI / 2 - lat;
 
-  //distribute to sphere
-    const x =  Math.sin( lat ) * Math.sin( lng );
-    const y =  Math.cos( lat );
-    const z =  Math.sin( lat ) * Math.cos( lng );
-
+  // distribute to sphere
+  const x = Math.sin(lat) * Math.sin(lng);
+  const y = Math.cos(lat);
+  const z = Math.sin(lat) * Math.cos(lng);
 
 
 //

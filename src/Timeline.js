@@ -4,7 +4,9 @@ import css from './Timeline.css';
 
 
 export const Timeline = React.createClass({
-  propTypes: {},
+  propTypes: {
+    width: React.PropTypes.number.isRequired
+  },
 
 
   componentWillMount() {
@@ -14,7 +16,16 @@ export const Timeline = React.createClass({
 
   componentDidMount() {
     if (this.ref) {
-      run({element: this.ref});
+      const {width} = this.props;
+      const {onResize} = run({element: this.ref, width, height: 50});
+      this.onResize = onResize;
+    }
+  },
+
+
+  componentWillReceiveProps({width}) {
+    if (this.ref && this.onResize) {
+      this.onResize({width, height: 50});
     }
   },
 

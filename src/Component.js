@@ -14,15 +14,9 @@ export const GeoVis = React.createClass({
   },
 
 
-  shouldComponentUpdate() {
-    return false;
-  },
-
-
   componentDidMount() {
     if (this.ref) {
       const {width, height} = this.props;
-      console.log(`{width, height}`, {width, height})
       const {onResize} = run({canvas: this.ref, width, height});
       this.onResize = onResize;
     }
@@ -33,6 +27,11 @@ export const GeoVis = React.createClass({
     if (this.ref && this.onResize) {
       this.onResize({width, height});
     }
+  },
+
+
+  shouldComponentUpdate() {
+    return false;
   },
 
 
