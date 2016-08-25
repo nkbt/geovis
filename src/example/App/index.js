@@ -1,5 +1,6 @@
 import React from 'react';
 import {GeoVis} from '../..';
+import {Timeline} from '../../Timeline';
 import {ReactElementResize} from 'react-element-resize';
 
 
@@ -24,6 +25,7 @@ export const App = React.createClass({
         style={{position: 'fixed'}}>
         {({width, height}) => (
           <div className={css.app}>
+            <Timeline width={width} />
             <GeoVis height={height} width={width} />
           </div>
         )}
