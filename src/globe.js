@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import topojson from 'topojson';
 import world from './world-110m.json';
 import {toVector} from './toVector';

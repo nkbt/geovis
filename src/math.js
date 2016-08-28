@@ -1,4 +1,4 @@
-import THREE from 'three';
+import {Math as TMath} from 'three';
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 /* Latitude/longitude spherical geodesy tools                         (c) Chris Veness 2002-2016  */
@@ -8,8 +8,8 @@ import THREE from 'three';
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
 
-const toDeg = THREE.Math.radToDeg;
-const toRad = THREE.Math.degToRad;
+const toDeg = TMath.radToDeg;
+const toRad = TMath.degToRad;
 
 /**
  * Converts point to Vector3d n-vector (normal to earth's surface).

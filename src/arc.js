@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import {toVector} from './toVector';
 import {distance, intermediatePoint} from './math';
 

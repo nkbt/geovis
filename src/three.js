@@ -1,4 +1,4 @@
-import THREE from 'three';
+import * as THREE from 'three';
 import orbitControls from 'three-orbit-controls';
 import {arc} from './arc';
 import {toVector} from './toVector';

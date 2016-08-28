@@ -1,4 +1,4 @@
-import THREE from 'three';
+import {Vector3} from 'three';
 
 
 export const toVector = ([lat, lon]) => {
@@ -10,5 +10,5 @@ export const toVector = ([lat, lon]) => {
   const z = Math.sin(phi) * Math.sin(theta);
 
 
-  return new THREE.Vector3(x, y, z);
+  return new Vector3(x, y, z);
 };
