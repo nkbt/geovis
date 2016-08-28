@@ -16,6 +16,7 @@ const SYD = [-33.865143, 151.209900];
 
 const attack = arc({EARTH_RADIUS, POINTS: 9});
 
+
 const onResize = ({camera, renderer}) =>
   ({width, height}) => {
     camera.aspect = width / height;

@@ -1,6 +1,7 @@
 {
   "extends": "./node_modules/react-component-template/.eslintrc",
   "rules": {
+    "no-undefined": 0,
     "newline-after-var": 0,
     "no-extra-parens": 0
   }

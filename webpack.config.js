@@ -67,6 +67,7 @@ const development = {
 
 
 const ghPages = {
+//  devtool: '#source-map',
   devtool: 'none',
   entry: pathTo('src', 'example', 'Example.js'),
   output: {filename: 'bundle.js', path: pathTo('example')},
@@ -87,13 +88,15 @@ const ghPages = {
       }
     })
   ],
-  module: {loaders: [
-    {
-      test: /\.js$/,
-      loaders: ['rollup'],
-      include: [pathTo('src')]
-    }
-  ].concat(loaders)},
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loaders: ['rollup'],
+        include: [pathTo('src')]
+      }
+    ].concat(loaders)
+  },
   resolve,
   stats
 };
@@ -122,13 +125,15 @@ const dist = {
       }
     })
   ],
-  module: {loaders: [
-    {
-      test: /\.js$/,
-      loaders: ['rollup'],
-      include: [pathTo('src')]
-    }
-  ].concat(loaders)},
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loaders: ['rollup'],
+        include: [pathTo('src')]
+      }
+    ].concat(loaders)
+  },
   resolve,
   stats,
   externals: {
@@ -159,6 +164,7 @@ const min = {
   resolve,
   stats,
   externals: {
+    three: {root: 'THREE', commonjs2: 'three', commonjs: 'three', amd: 'three'},
     react: {root: 'React', commonjs2: 'react', commonjs: 'react', amd: 'react'}
   }
 };

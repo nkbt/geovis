@@ -10,7 +10,7 @@ import {App} from './App';
 import {attacks} from '../attacks/reducer';
 const rootReducer = combineReducers({attacks});
 const middleware = process.env.NODE_ENV === 'production' ?
-  null :
+  undefined :
   applyMiddleware(
     require('redux-logger')({
       level: 'info',
