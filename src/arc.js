@@ -23,11 +23,16 @@ export const arc = ({EARTH_RADIUS, POINTS}) => {
 
     const curve = new THREE.CatmullRomCurve3(points);
 
-    const geometry = new THREE.Geometry();
-    geometry.vertices = curve.getPoints(70);
 
-    const material = new THREE.LineBasicMaterial({color: 0x00ff00, linewidth: width});
+    const path = curve;
+    const segments = Math.round(Math.sqrt(dist) * 10);
+    const radius = Math.sqrt(width) * 2;
+    const radiusSegments = Math.round(radius * 3);
+    const tubeGeom = new THREE.TubeGeometry(path, segments, radius, radiusSegments, false);
+    const tubeMat = new THREE.MeshLambertMaterial({
+      color: 0x00ff00
+    });
 
-    return new THREE.Line(geometry, material);
+    return new THREE.Mesh(tubeGeom, tubeMat);
   };
 };

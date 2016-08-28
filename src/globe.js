@@ -11,7 +11,7 @@ const countries = topojson
 
 export const globe = ({EARTH_RADIUS}) => {
   const sphere = () => new THREE.Mesh(
-    new THREE.SphereGeometry(EARTH_RADIUS, 40, 30),
+    new THREE.SphereBufferGeometry(EARTH_RADIUS, 40, 30),
     new THREE.MeshBasicMaterial({
       color: 0x000909,
       transparent: true,

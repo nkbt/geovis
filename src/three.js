@@ -35,6 +35,12 @@ const onData = ({scene}) => attacks => {
 export const run = ({canvas, width, height}) => {
   const scene = new THREE.Scene();
 
+
+  const light = new THREE.HemisphereLight(0xffffff, 0x000909, 1);
+//  const light = new THREE.PointLight(0xff0000, 1, 1000);
+//  light.position.set(50, 50, 50);
+  scene.add(light);
+
   const camera = new THREE.PerspectiveCamera(50, width / height, 1, 5000);
   camera.position.copy(toVector(SYD).multiplyScalar(EARTH_RADIUS * 4));
   camera.lookAt(toVector(SYD).multiplyScalar(EARTH_RADIUS));
