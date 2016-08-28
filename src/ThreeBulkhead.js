@@ -2,7 +2,7 @@ import React from 'react';
 import {run} from './three';
 
 
-export const GeoVis = React.createClass({
+export const ThreeBulkhead = React.createClass({
   propTypes: {
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired

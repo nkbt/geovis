@@ -1,5 +1,5 @@
 import React from 'react';
-import {GeoVis} from '../..';
+import {ThreeBulkhead} from '../../ThreeBulkhead';
 import {ReactElementResize} from 'react-element-resize';
 
 
@@ -24,7 +24,7 @@ export const App = React.createClass({
         style={{position: 'fixed'}}>
         {({width, height}) => (
           <div className={css.app}>
-            <GeoVis height={height} width={width} />
+            <ThreeBulkhead height={height} width={width} />
           </div>
         )}
       </ReactElementResize>

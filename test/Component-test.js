@@ -1,5 +1,5 @@
 import test from 'tape';
-import {GeoVis} from '../src/Component';
+import {GeoVis} from '../src/ThreeBulkhead';
 
 
 test('GeoVis', t => {

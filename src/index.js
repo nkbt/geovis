@@ -1,1 +1,1 @@
-export {GeoVis} from './Component';
+export {ThreeBulkhead} from './ThreeBulkhead';
