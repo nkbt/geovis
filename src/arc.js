@@ -10,7 +10,7 @@ export const arc = ({EARTH_RADIUS, POINTS}) => {
   const elevationCoefficients = midpoints.map(p => p === 1 ? 0 : Math.sin(Math.PI * p));
   const maxElevationCoefficient = 15 / Math.PI;
 
-  return (from, to) => {
+  return (from, to, width) => {
     const dist = distance(from, to, EARTH_RADIUS);
     const maxElevation = Math.sqrt(maxElevationCoefficient * dist);
     const elevations = elevationCoefficients
@@ -26,7 +26,7 @@ export const arc = ({EARTH_RADIUS, POINTS}) => {
     const geometry = new THREE.Geometry();
     geometry.vertices = curve.getPoints(70);
 
-    const material = new THREE.LineBasicMaterial({color: 0x00ff00, linewidth: 2});
+    const material = new THREE.LineBasicMaterial({color: 0x00ff00, linewidth: width});
 
     return new THREE.Line(geometry, material);
   };

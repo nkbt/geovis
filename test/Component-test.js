@@ -1,8 +1,8 @@
 import test from 'tape';
-import {GeoVis} from '../src/ThreeBulkhead';
+import {ThreeBulkhead} from '../src/ThreeBulkhead';
 
 
 test('GeoVis', t => {
-  t.ok(GeoVis instanceof Function, 'should be function');
+  t.ok(ThreeBulkhead instanceof Function, 'should be function');
   t.end();
 });

@@ -1,9 +1,17 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {run} from './three';
 
 
-export const ThreeBulkhead = React.createClass({
+export const ThreeBulkheadContent = React.createClass({
   propTypes: {
+    attacks: React.PropTypes.shape(React.PropTypes.shape({
+      srcLat: React.PropTypes.number.isRequired,
+      srcLon: React.PropTypes.number.isRequired,
+      dstLat: React.PropTypes.number.isRequired,
+      dstLon: React.PropTypes.number.isRequired,
+      value: React.PropTypes.number.isRequired
+    })).isRequired,
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired
   },
@@ -16,16 +24,30 @@ export const ThreeBulkhead = React.createClass({
 
   componentDidMount() {
     if (this.ref) {
-      const {width, height} = this.props;
-      const {onResize} = run({canvas: this.ref, width, height});
+      const {width, height, attacks} = this.props;
+      const {onResize, onData} = run({canvas: this.ref, width, height});
       this.onResize = onResize;
+      this.onData = onData;
+
+      onData(attacks);
     }
   },
 
 
-  componentWillReceiveProps({width, height}) {
-    if (this.ref && this.onResize) {
+  componentWillReceiveProps({width, height, attacks}) {
+    if (!this.ref) {
+      return;
+    }
+
+    if (this.onResize &&
+      width !== this.props.width &&
+      height !== this.props.height) {
       this.onResize({width, height});
+    }
+
+    if (this.onData &&
+      attacks !== this.props.attacks) {
+      this.onData(attacks);
     }
   },
 
@@ -44,3 +66,19 @@ export const ThreeBulkhead = React.createClass({
     return <canvas ref={this.onRef} />;
   }
 });
+
+
+const mapStateToProps = ({
+  attacks
+}) => console.log(`attacks`, attacks) || ({
+  attacks
+});
+
+
+const mapDispatchToProps = dispatch => ({});
+
+
+export const ThreeBulkhead = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ThreeBulkheadContent);
