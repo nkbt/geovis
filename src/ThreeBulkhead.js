@@ -5,7 +5,7 @@ import {run} from './three';
 
 export const ThreeBulkheadContent = React.createClass({
   propTypes: {
-    attacks: React.PropTypes.shape(React.PropTypes.shape({
+    attacks: React.PropTypes.objectOf(React.PropTypes.shape({
       srcLat: React.PropTypes.number.isRequired,
       srcLon: React.PropTypes.number.isRequired,
       dstLat: React.PropTypes.number.isRequired,
@@ -68,17 +68,4 @@ export const ThreeBulkheadContent = React.createClass({
 });
 
 
-const mapStateToProps = ({
-  attacks
-}) => console.log(`attacks`, attacks) || ({
-  attacks
-});
-
-
-const mapDispatchToProps = dispatch => ({});
-
-
-export const ThreeBulkhead = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ThreeBulkheadContent);
+export const ThreeBulkhead = connect(({attacks}) => ({attacks}))(ThreeBulkheadContent);
