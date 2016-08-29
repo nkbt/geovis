@@ -1,5 +1,5 @@
 import React from 'react';
-import {ThreeBulkhead} from '../../ThreeBulkhead';
+import {ThreeBulkhead} from './ThreeBulkhead';
 import {ReactElementResize} from 'react-element-resize';
 
 

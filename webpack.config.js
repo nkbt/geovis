@@ -44,7 +44,7 @@ const development = {
   devtool: '#source-map',
 
   entry: [
-    pathTo('src', 'example', 'Example.js'),
+    pathTo('src', 'index.js'),
     'webpack-dev-server/client?http://localhost:8080'
   ],
   output: {filename: 'bundle.js', path: pathTo('example')},
@@ -69,7 +69,7 @@ const development = {
 const ghPages = {
 //  devtool: '#source-map',
   devtool: 'none',
-  entry: pathTo('src', 'example', 'Example.js'),
+  entry: pathTo('src', 'index.js'),
   output: {filename: 'bundle.js', path: pathTo('example')},
 
   plugins: [
