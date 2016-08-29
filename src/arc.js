@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {toVector} from './toVector';
+import {toVector} from './math';
 import {distance, intermediatePoint} from './math';
 
 export const arc = ({EARTH_RADIUS, POINTS}) => {
