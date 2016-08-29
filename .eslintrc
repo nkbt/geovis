@@ -3,6 +3,7 @@
   "rules": {
     "no-undefined": 0,
     "newline-after-var": 0,
-    "no-extra-parens": 0
+    "no-extra-parens": 0,
+    "react/jsx-sort-props": 0
   }
 }

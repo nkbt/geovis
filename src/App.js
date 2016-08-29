@@ -1,6 +1,6 @@
 import React from 'react';
-import {ThreeBulkhead} from './ThreeBulkhead';
 import {ReactElementResize} from 'react-element-resize';
+import {Globe} from './Globe';
 
 
 import css from './App.css';
@@ -24,7 +24,7 @@ export const App = React.createClass({
         style={{position: 'fixed'}}>
         {({width, height}) => (
           <div className={css.app}>
-            <ThreeBulkhead height={height} width={width} />
+            <Globe height={height} width={width} />
           </div>
         )}
       </ReactElementResize>

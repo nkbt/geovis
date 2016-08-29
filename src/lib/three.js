@@ -17,23 +17,11 @@ const SYD = [-33.865143, 151.209900];
 const attack = arc({EARTH_RADIUS, POINTS: 9});
 
 
-const onResize = ({camera, renderer}) =>
-  ({width, height}) => {
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-    renderer.setSize(width, height);
-  };
-
-
-const onData = ({scene}) => attacks => {
-  Object.keys(attacks)
-    .map(k => attacks[k])
-    .forEach(({srcLat, srcLon, dstLat, dstLon, value}) =>
-      scene.add(attack([srcLat, srcLon], [dstLat, dstLon], value)));
-};
-
-
-export const run = ({canvas, width, height}) => {
+export const onCreate = ({
+  element: canvas,
+  width: initialWidth,
+  height: initialHeight
+}) => {
   const scene = new THREE.Scene();
 
 
@@ -42,7 +30,7 @@ export const run = ({canvas, width, height}) => {
 //  light.position.set(50, 50, 50);
   scene.add(light);
 
-  const camera = new THREE.PerspectiveCamera(50, width / height, 1, 5000);
+  const camera = new THREE.PerspectiveCamera(50, initialWidth / initialHeight, 1, 5000);
   camera.position.copy(toVector(SYD).multiplyScalar(EARTH_RADIUS * 4));
   camera.lookAt(toVector(SYD).multiplyScalar(EARTH_RADIUS));
 
@@ -57,7 +45,7 @@ export const run = ({canvas, width, height}) => {
   globe({EARTH_RADIUS}).map(mesh => scene.add(mesh));
 
   const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: false});
-  renderer.setSize(width, height);
+  renderer.setSize(initialWidth, initialHeight);
 
 
   const render = () => {
@@ -74,9 +62,20 @@ export const run = ({canvas, width, height}) => {
   animate();
 
 
-  return {
-    raf,
-    onResize: onResize({camera, renderer}),
-    onData: onData({scene})
+  const onUpdate = ({attacks, width, height}) => {
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+
+    Object.keys(attacks)
+      .map(k => attacks[k])
+      .forEach(({srcLat, srcLon, dstLat, dstLon, value}) =>
+        scene.add(attack([srcLat, srcLon], [dstLat, dstLon], value)));
   };
+
+
+  const onDestroy = () => cancelAnimationFrame(raf);
+
+
+  return {onDestroy, onUpdate};
 };

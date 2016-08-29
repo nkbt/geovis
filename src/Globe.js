@@ -1,0 +1,48 @@
+import React from 'react';
+import {shouldComponentUpdate} from 'react-addons-pure-render-mixin';
+import {connect} from 'react-redux';
+import {ReactBulkhead} from 'react-bulkhead';
+import {onCreate} from './lib/three';
+
+
+const GlobeContent = React.createClass({
+  propTypes: {
+    attacks: React.PropTypes.objectOf(React.PropTypes.shape({
+      srcLat: React.PropTypes.number.isRequired,
+      srcLon: React.PropTypes.number.isRequired,
+      dstLat: React.PropTypes.number.isRequired,
+      dstLon: React.PropTypes.number.isRequired,
+      value: React.PropTypes.number.isRequired
+    })).isRequired,
+    width: React.PropTypes.number.isRequired,
+    height: React.PropTypes.number.isRequired
+  },
+
+
+  shouldComponentUpdate,
+
+
+  render() {
+    const {attacks, width, height} = this.props;
+    return (
+      <ReactBulkhead
+        element="canvas"
+        attacks={attacks}
+        width={width}
+        height={height}
+        onCreate={onCreate} />
+    );
+  }
+});
+
+
+const mapStateToProps = ({
+  attacks
+}) => ({
+  attacks
+});
+
+
+export const Globe = connect(
+  mapStateToProps
+)(GlobeContent);
