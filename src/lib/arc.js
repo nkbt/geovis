@@ -1,8 +1,8 @@
 import * as THREE from 'three';
+import TWEEN from 'tween.js';
 import {toVector} from './math';
 import {distance, intermediatePoint} from './math';
 import {rnd, arr} from './utils';
-
 
 
 const line = path => {
@@ -14,10 +14,21 @@ const line = path => {
     dashSize: 1,
     gapSize: rnd(5, 30),
     color: 0x00ff00,
-    linewidth: 2
+    linewidth: 2,
+    transparent: true,
+    opacity: 0.9
   });
 
-  return new THREE.Line(geometry, material);
+  const lineObject = new THREE.Line(geometry, material);
+
+  lineObject.tween = new TWEEN.Tween({opacity: 1})
+    .to({opacity: 0}, 5000)
+    .interpolation(TWEEN.Interpolation.CatmullRom)
+    .onUpdate(function () {
+      Object.assign(material, {opacity: this.opacity});
+    });
+
+  return lineObject;
 };
 
 

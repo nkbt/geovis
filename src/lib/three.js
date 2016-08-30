@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import TWEEN from 'tween.js';
 import orbitControls from 'three-orbit-controls';
 import {arc} from './arc';
 import {toVector} from './math';
@@ -17,18 +18,24 @@ const SYD = [-33.865143, 151.209900];
 const attack = arc({EARTH_RADIUS, POINTS: 9});
 
 
+const noop = () => {
+  // empty
+};
+
 export const onCreate = ({
   element: canvas,
   width: initialWidth,
   height: initialHeight
 }) => {
+  let stats = {begin: noop, end: noop};
+  if (process.env.NODE_ENV !== 'production') {
+    const Stats = require('stats.js');
+    stats = new Stats();
+    document.body.appendChild(stats.dom);
+    stats.showPanel(0);
+  }
+
   const scene = new THREE.Scene();
-
-
-  const light = new THREE.HemisphereLight(0xffffff, 0x000909, 1);
-//  const light = new THREE.PointLight(0xff0000, 1, 1000);
-//  light.position.set(50, 50, 50);
-  scene.add(light);
 
   const camera = new THREE.PerspectiveCamera(50, initialWidth / initialHeight, 1, 5000);
   camera.position.copy(toVector(SYD).multiplyScalar(EARTH_RADIUS * 4));
@@ -54,11 +61,15 @@ export const onCreate = ({
   };
 
   let raf = null;
-  const animate = () => {
-    raf = requestAnimationFrame(animate);
+  const animate = time => {
+    stats.begin();
+    TWEEN.update(time);
     render();
+    stats.end();
+
+    raf = requestAnimationFrame(animate);
   };
-  animate();
+  raf = requestAnimationFrame(animate);
 
 
   const globeAttacks = {};
