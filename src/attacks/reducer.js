@@ -1,3 +1,5 @@
+import {rnd} from '../lib/utils';
+
 const SYD = [-33.865143, 151.209900];
 const DARWIN = [-12.462827, 130.841782];
 const NY = [40.730610, -73.935242];
@@ -13,13 +15,9 @@ const sampleAttacks = [
   [MOSCOW, VANCOUVER],
   [LONDON, NY]
 ];
-export const rnd = (min, max) => (
-  max === undefined ?
-    Math.round(Math.random() * min) :
-    (min + Math.round(Math.random() * max))
-);
+
 export const mkAttack = ([srcLat, srcLon], [dstLat, dstLon]) => ({
-  srcLat, srcLon, dstLat, dstLon, value: rnd(1, 10)
+  srcLat, srcLon, dstLat, dstLon, value: rnd(5, 30)
 });
 
 

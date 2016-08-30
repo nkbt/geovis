@@ -58,8 +58,17 @@ export const onCreate = ({
     raf = requestAnimationFrame(animate);
     render();
   };
-
   animate();
+
+
+  const globeAttacks = {};
+
+
+  const removeAttack = id => {
+    scene.remove(scene.getObjectByName(id));
+    clearTimeout(globeAttacks[id]);
+    delete globeAttacks[id];
+  };
 
 
   const onUpdate = ({attacks, width, height}) => {
@@ -69,12 +78,30 @@ export const onCreate = ({
 
     Object.keys(attacks)
       .map(k => attacks[k])
-      .forEach(({srcLat, srcLon, dstLat, dstLon, value}) =>
-        scene.add(attack([srcLat, srcLon], [dstLat, dstLon], value)));
+      .forEach(({id, srcLat, srcLon, dstLat, dstLon, value}) => {
+        if (id in globeAttacks) {
+          console.log(`globeAttacks[id]`, globeAttacks[id]);
+          return;
+        }
+        const obj = attack([srcLat, srcLon], [dstLat, dstLon], value);
+        obj.name = id;
+//        globeAttacks[id] = setTimeout(() => removeAttack(id), 5000);
+        scene.add(obj);
+      });
+    Object.keys(globeAttacks)
+      .forEach(id => {
+        if (id in attacks) {
+          return;
+        }
+        removeAttack(id);
+      });
   };
 
 
-  const onDestroy = () => cancelAnimationFrame(raf);
+  const onDestroy = () => {
+    cancelAnimationFrame(raf);
+    Object.keys(globeAttacks).forEach(id => clearTimeout(globeAttacks[id]));
+  };
 
 
   return {onDestroy, onUpdate};
