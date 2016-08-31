@@ -13,6 +13,9 @@ if (!COMPONENT_NAME) {
 }
 
 
+const WEBPACK_HOST = process.env.WEBPACK_HOST || 'localhost';
+
+
 const loaders = [
   {
     test: /\.css$/,
@@ -45,7 +48,7 @@ const development = {
 
   entry: [
     pathTo('src', 'index.js'),
-    'webpack-dev-server/client?http://localhost:8080'
+    `webpack-dev-server/client?http://${WEBPACK_HOST}:8080`
   ],
   output: {filename: 'bundle.js', path: pathTo('example')},
   plugins: [
@@ -56,6 +59,7 @@ const development = {
   resolve,
   stats,
   devServer: {
+    host: WEBPACK_HOST || '0.0.0.0',
     historyApiFallback: true,
     stats: {
       // Do not show list of hundreds of files included in a bundle

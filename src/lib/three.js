@@ -24,6 +24,7 @@ const noop = () => {
 
 export const onCreate = ({
   element: canvas,
+  attacks: initialAttacks,
   width: initialWidth,
   height: initialHeight
 }) => {
@@ -113,6 +114,10 @@ export const onCreate = ({
     cancelAnimationFrame(raf);
     Object.keys(globeAttacks).forEach(id => clearTimeout(globeAttacks[id]));
   };
+
+
+  // Initial render
+  onUpdate({attacks: initialAttacks, width: initialWidth, height: initialHeight});
 
 
   return {onDestroy, onUpdate};

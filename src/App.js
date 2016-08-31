@@ -9,6 +9,17 @@ import css from './App.css';
 const noop = () => null;
 
 
+const GlobeWrapper = ({width, height}) => (width > 0 && height > 0) ? (
+  <div className={css.app}>
+    <Globe height={height} width={width} />
+  </div>
+) : null;
+GlobeWrapper.propTypes = {
+  width: React.PropTypes.number.isRequired,
+  height: React.PropTypes.number.isRequired
+};
+
+
 export const App = React.createClass({
   shouldComponentUpdate() {
     return false;
@@ -22,11 +33,7 @@ export const App = React.createClass({
         debounceTimeout={50}
         onResize={noop}
         style={{position: 'fixed'}}>
-        {({width, height}) => (
-          <div className={css.app}>
-            <Globe height={height} width={width} />
-          </div>
-        )}
+        {GlobeWrapper}
       </ReactElementResize>
     );
   }
