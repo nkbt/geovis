@@ -4,6 +4,7 @@ import orbitControls from 'three-orbit-controls';
 import {arc} from './arc';
 import {toVector} from './math';
 import {globe} from './globe';
+import {differ} from './differ';
 
 
 const EARTH_RADIUS = 200;
@@ -21,6 +22,7 @@ const attack = arc({EARTH_RADIUS, POINTS: 9});
 const noop = () => {
   // empty
 };
+
 
 export const onCreate = ({
   element: canvas,
@@ -74,6 +76,7 @@ export const onCreate = ({
 
 
   const globeAttacks = {};
+  const diff = differ(globeAttacks);
 
 
   const removeAttack = id => {
@@ -82,31 +85,39 @@ export const onCreate = ({
     delete globeAttacks[id];
   };
 
+  const updateAttack = attacks => id => {
+    globeAttacks[id].value = attacks[id].value;
+//    scene.remove(scene.getObjectByName(id));
+//    clearTimeout(globeAttacks[id]);
+//    delete globeAttacks[id];
+  };
+
+
+  const addAttack = attacks => id => {
+    const {srcLat, srcLon, dstLat, dstLon, value} = attacks[id];
+    const obj = attack([srcLat, srcLon], [dstLat, dstLon], value);
+    obj.name = id;
+    globeAttacks[id] = attacks[id];
+    // globeAttacks[id] = setTimeout(() => removeAttack(id), 5000);
+    scene.add(obj);
+  };
+
 
   const onUpdate = ({attacks, width, height}) => {
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
 
-    Object.keys(attacks)
-      .map(k => attacks[k])
-      .forEach(({id, srcLat, srcLon, dstLat, dstLon, value}) => {
-        if (id in globeAttacks) {
-          console.log(`globeAttacks[id]`, globeAttacks[id]);
-          return;
-        }
-        const obj = attack([srcLat, srcLon], [dstLat, dstLon], value);
-        obj.name = id;
-//        globeAttacks[id] = setTimeout(() => removeAttack(id), 5000);
-        scene.add(obj);
-      });
-    Object.keys(globeAttacks)
-      .forEach(id => {
-        if (id in attacks) {
-          return;
-        }
-        removeAttack(id);
-      });
+    const adder = addAttack(attacks);
+    const updater = updateAttack(attacks);
+    const remover = removeAttack;
+
+    const {add, remove, update} = diff(attacks);
+
+    // mutate
+    remove.forEach(remover);
+    update.forEach(updater);
+    add.forEach(adder);
   };
 
 
