@@ -1,0 +1,24 @@
+.container {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  overflow: hidden;
+  width: 1em;
+  border-top-left-radius: 0.5em;
+  background: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  text-align: right;
+  white-space: nowrap;
+  transition: width 150ms ease;
+  transition-delay: 300ms;
+}
+
+.container:hover {
+  width: 20%;
+  transition-delay: 0ms;
+}
+
+.content {
+  padding: 1em 0.7em 0.7em 1em;
+}

@@ -7,6 +7,15 @@ const LONDON = [51.509865, -0.118092];
 const VANCOUVER = [49.246292, -123.116226];
 const MOSCOW = [55.751244, 37.618423];
 const KYIV = [50.411198, 30.446634];
+const points = [
+  SYD,
+  DARWIN,
+  NY,
+  LONDON,
+  VANCOUVER,
+  MOSCOW,
+  KYIV
+];
 const sampleAttacks = [
   [SYD, NY],
   [SYD, DARWIN],
@@ -15,6 +24,8 @@ const sampleAttacks = [
   [MOSCOW, VANCOUVER],
   [LONDON, NY]
 ];
+
+const sample = arr => arr[Math.round(Math.random() * (arr.length - 1))];
 
 export const mkAttack = ([srcLat, srcLon], [dstLat, dstLon]) => ({
   srcLat, srcLon, dstLat, dstLon, value: rnd(5, 30)
@@ -34,15 +45,24 @@ export const add = (state, {attacks = []}) => attacks.reduce((result, attack) =>
 }, state);
 
 
+const addRandom = state => add(state, {attacks: [mkAttack(sample(points), sample(points))]});
+
+
 const initialState = sampleAttacks
   .map(attack => mkAttack(...attack))
   .reduce((st, a) => add(st, {attacks: [a]}), {});
 
 
 export const ATTACKS_ADD = 'ATTACKS_ADD';
-export const attacks = (state = initialState, {type, ...action}) => (
-  type === ATTACKS_ADD ?
-    add(state, action) :
-    state
-);
+export const ATTACKS_ADD_RANDOM = 'ATTACKS_ADD_RANDOM';
+export const attacks = (state = initialState, {type, ...action}) => {
+  switch (type) {
+    case ATTACKS_ADD:
+      return add(state, action);
+    case ATTACKS_ADD_RANDOM:
+      return addRandom(state, action);
+    default:
+      return state;
+  }
+};
 

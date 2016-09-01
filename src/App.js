@@ -1,6 +1,7 @@
 import React from 'react';
 import {ReactElementResize} from 'react-element-resize';
 import {Globe} from './Globe';
+import {Controls} from './Controls';
 
 
 import css from './App.css';
@@ -12,6 +13,7 @@ const noop = () => null;
 const GlobeWrapper = ({width, height}) => (width > 0 && height > 0) ? (
   <div className={css.app}>
     <Globe height={height} width={width} />
+    <Controls />
   </div>
 ) : null;
 GlobeWrapper.propTypes = {
