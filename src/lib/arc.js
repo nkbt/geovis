@@ -22,7 +22,7 @@ const line = path => {
   const lineObject = new THREE.Line(geometry, material);
 
   lineObject.tween = new TWEEN.Tween({opacity: 1})
-    .to({opacity: 0}, 5000)
+    .to({opacity: 0}, 1000)
     .interpolation(TWEEN.Interpolation.CatmullRom)
     .onUpdate(function () {
       Object.assign(material, {opacity: this.opacity});
@@ -57,6 +57,23 @@ export const arc = ({EARTH_RADIUS, POINTS}) => {
 
     const group = new THREE.Group();
     lines.forEach(l => group.add(l));
+
+    group.destroy = callback => {
+      let all = group.children.length;
+      const onComplete = () => {
+        all = all - 1;
+        if (all > 0) {
+          return;
+        }
+        callback();
+      };
+
+      group.children.forEach(l => {
+        l.tween
+          .onComplete(onComplete)
+          .start();
+      })
+    }
 
     return group;
   };

@@ -28,21 +28,30 @@ const sampleAttacks = [
 const sample = arr => arr[Math.round(Math.random() * (arr.length - 1))];
 
 export const mkAttack = ([srcLat, srcLon], [dstLat, dstLon]) => ({
+  id: `${srcLat}|${srcLon}|${dstLat}|${dstLon}|${performance.now()}`,
   srcLat, srcLon, dstLat, dstLon, value: rnd(5, 30)
 });
 
 
-export const attackId = attack =>
-  `${attack.srcLat}|${attack.srcLon}|${attack.dstLat}|${attack.dstLon}`;
-
-
 export const add = (state, {attacks = []}) => attacks.reduce((result, attack) => {
-  const id = attackId(attack);
+  const id = attack.id;
   if (result[id]) {
     return {...result, [id]: {...result[id], value: result[id].value + attack.value}};
   }
-  return {...result, [id]: {id, ...attack}};
+  return {...result, [id]: attack};
 }, state);
+
+
+export const remove = (state, {ids = []}) => {
+  const toRemove = ids.filter(id => id in state);
+  if (!toRemove.length) {
+    return state;
+  }
+
+  return Object.keys(state)
+    .filter(id => toRemove.indexOf(id) === -1)
+    .reduce((result, id) => Object.assign(result, {[id]: state[id]}), {});
+};
 
 
 const addRandom = state => add(state, {attacks: [mkAttack(sample(points), sample(points))]});
@@ -55,12 +64,15 @@ const initialState = sampleAttacks
 
 export const ATTACKS_ADD = 'ATTACKS_ADD';
 export const ATTACKS_ADD_RANDOM = 'ATTACKS_ADD_RANDOM';
+export const ATTACKS_REMOVE = 'ATTACKS_REMOVE';
 export const attacks = (state = initialState, {type, ...action}) => {
   switch (type) {
     case ATTACKS_ADD:
       return add(state, action);
     case ATTACKS_ADD_RANDOM:
       return addRandom(state, action);
+    case ATTACKS_REMOVE:
+      return remove(state, action);
     default:
       return state;
   }

@@ -80,16 +80,20 @@ export const onCreate = ({
 
 
   const removeAttack = id => {
-    scene.remove(scene.getObjectByName(id));
-    clearTimeout(globeAttacks[id]);
-    delete globeAttacks[id];
+    if (!(id in globeAttacks)) {
+      return;
+    }
+    const attack = scene.getObjectByName(id);
+    const onDestroy = () => {
+      scene.remove(attack);
+      delete globeAttacks[id];
+    };
+    attack.destroy(onDestroy);
   };
+
 
   const updateAttack = attacks => id => {
     globeAttacks[id].value = attacks[id].value;
-//    scene.remove(scene.getObjectByName(id));
-//    clearTimeout(globeAttacks[id]);
-//    delete globeAttacks[id];
   };
 
 
@@ -98,7 +102,6 @@ export const onCreate = ({
     const obj = attack([srcLat, srcLon], [dstLat, dstLon], value);
     obj.name = id;
     globeAttacks[id] = attacks[id];
-    // globeAttacks[id] = setTimeout(() => removeAttack(id), 5000);
     scene.add(obj);
   };
 
