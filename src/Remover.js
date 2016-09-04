@@ -1,5 +1,5 @@
 import React from 'react';
-import {shouldComponentUpdate} from 'react-addons-pure-render-mixin';
+import {shouldComponentUpdate} from 'react/lib/ReactComponentWithPureRenderMixin';
 import {connect} from 'react-redux';
 import {ATTACKS_REMOVE} from './attacks/reducer';
 import {differ} from './lib/differ';
@@ -35,12 +35,8 @@ const RemoverContent = React.createClass({
 
 
   componentWillUnmount() {
-    const {onRemove} = this.props;
     Object.keys(this.timers)
-      .forEach(id => {
-        clearTimeout(this.timers[id]);
-        onRemove(id);
-      });
+      .forEach(id => clearTimeout(this.timers[id]));
   },
 
 

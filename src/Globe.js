@@ -1,5 +1,5 @@
 import React from 'react';
-import {shouldComponentUpdate} from 'react-addons-pure-render-mixin';
+import {shouldComponentUpdate} from 'react/lib/ReactComponentWithPureRenderMixin';
 import {connect} from 'react-redux';
 import {ReactBulkhead} from 'react-bulkhead';
 import {onCreate} from './lib/three';

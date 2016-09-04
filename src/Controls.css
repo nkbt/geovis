@@ -4,21 +4,36 @@
   bottom: 0;
   z-index: 10000;
   overflow: hidden;
-  width: 1em;
+  max-width: 3em;
   border-top-left-radius: 0.5em;
   background: rgba(255, 255, 255, 0.3);
   color: #fff;
   text-align: right;
   white-space: nowrap;
-  transition: width 150ms ease;
-  transition-delay: 300ms;
+  opacity: 0.3;
+  cursor: pointer;
+  transition: max-width 300ms ease;
 }
 
-.container:hover {
-  width: 20%;
-  transition-delay: 0ms;
+.container.opened {
+  max-width: 100%;
+  transition-duration: 1000ms;
 }
 
 .content {
-  padding: 1em 0.7em 0.7em 1em;
+  padding: 1em 0.7em 0.7em 3em;
+}
+
+.toggle {
+  position: absolute;
+  top: 0.25em;
+  left: 0.5em;
+  color: rgba(255, 255, 255, 0.3);
+  content: '<';
+  font-size: 2em;
+  line-height: 1em;
+}
+
+.opened .toggle {
+  content: '>';
 }

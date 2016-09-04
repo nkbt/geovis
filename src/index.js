@@ -8,7 +8,10 @@ import './reset.css';
 import {App} from './App';
 
 import {attacks} from './attacks/reducer';
-const rootReducer = combineReducers({attacks});
+import {controls} from './controls/reducer';
+
+
+const rootReducer = combineReducers({attacks, controls});
 const middleware = process.env.NODE_ENV === 'production' ?
   undefined :
   applyMiddleware(

@@ -65,9 +65,13 @@ const addRandom = state => add(state, {attacks: [mkAttack(sample(points), sample
 const initialState = {};
 
 
+export const clear = () => ({});
+
+
 export const ATTACKS_ADD = 'ATTACKS_ADD';
 export const ATTACKS_ADD_RANDOM = 'ATTACKS_ADD_RANDOM';
 export const ATTACKS_REMOVE = 'ATTACKS_REMOVE';
+export const ATTACKS_CLEAR = 'ATTACKS_CLEAR';
 export const attacks = (state = initialState, {type, ...action}) => {
   switch (type) {
     case ATTACKS_ADD:
@@ -76,6 +80,8 @@ export const attacks = (state = initialState, {type, ...action}) => {
       return addRandom(state, action);
     case ATTACKS_REMOVE:
       return remove(state, action);
+    case ATTACKS_CLEAR:
+      return clear(state, action);
     default:
       return state;
   }
