@@ -3,6 +3,7 @@ import {ReactElementResize} from 'react-element-resize';
 import {Globe} from './Globe';
 import {Controls} from './Controls';
 import {Remover} from './Remover';
+import {Adder} from './Adder';
 
 
 import css from './App.css';
@@ -15,6 +16,7 @@ const GlobeWrapper = ({width, height}) => (width > 0 && height > 0) ? (
   <div className={css.app}>
     <Globe height={height} width={width} />
     <Controls />
+    <Adder />
     <Remover />
   </div>
 ) : null;
