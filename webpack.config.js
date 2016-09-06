@@ -19,8 +19,7 @@ const WEBPACK_HOST = process.env.WEBPACK_HOST || 'localhost';
 const loaders = [
   {
     test: /\.css$/,
-    loader: 'style!css',
-    include: [pathTo('src')]
+    loader: 'style!css'
   },
   {test: /\.json$/, loader: 'json'},
   {

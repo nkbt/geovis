@@ -12,7 +12,7 @@
     "precommit": "true || npm start precommit",
     "prepush": "true || npm start prepush",
     "postversion": "npm start postversion",
-    "prepublish": "npm start prepublish && cp -r src/static lib"
+    "prepublish": "npm start prepublish"
   },
   "repository": {
     "type": "git",
