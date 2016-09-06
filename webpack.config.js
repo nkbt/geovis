@@ -45,9 +45,8 @@ const stats = {colors: true};
 
 const development = {
   devtool: '#source-map',
-
   entry: [
-    pathTo('src', 'index.js'),
+    pathTo('src', 'example', 'index.js'),
     `webpack-dev-server/client?http://${WEBPACK_HOST}:8080`
   ],
   output: {filename: 'bundle.js', path: pathTo('example')},
@@ -71,9 +70,8 @@ const development = {
 
 
 const ghPages = {
-//  devtool: '#source-map',
-  devtool: 'none',
-  entry: pathTo('src', 'index.js'),
+  devtool: '#source-map',
+  entry: pathTo('src', 'example', 'index.js'),
   output: {filename: 'bundle.js', path: pathTo('example')},
 
   plugins: [
@@ -93,22 +91,25 @@ const ghPages = {
     })
   ],
   module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        loaders: ['rollup'],
-        include: [pathTo('src')]
-      }
-    ].concat(loaders)
+    loaders
   },
   resolve,
   stats
 };
 
 
+const externals = {
+  redux: {root: 'Redux', commonjs2: 'three', commonjs: 'three', amd: 'three'},
+  'react-redux': {
+    root: 'ReactRedux', commonjs2: 'react-redux', commonjs: 'react-redux', amd: 'react-redux'
+  },
+  three: {root: 'THREE', commonjs2: 'three', commonjs: 'three', amd: 'three'},
+  react: {root: 'React', commonjs2: 'react', commonjs: 'react', amd: 'react'}
+};
+
+
 const dist = {
-//  devtool: '#source-map',
-  devtool: 'none',
+  devtool: '#source-map',
   entry: pathTo('src', 'index.js'),
   output: {
     filename: `${require(pathTo('package.json')).name}.js`,
@@ -130,20 +131,11 @@ const dist = {
     })
   ],
   module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        loaders: ['rollup'],
-        include: [pathTo('src')]
-      }
-    ].concat(loaders)
+    loaders
   },
   resolve,
   stats,
-  externals: {
-    three: {root: 'THREE', commonjs2: 'three', commonjs: 'three', amd: 'three'},
-    react: {root: 'React', commonjs2: 'react', commonjs: 'react', amd: 'react'}
-  }
+  externals
 };
 
 
@@ -167,20 +159,11 @@ const min = {
   module: {loaders},
   resolve,
   stats,
-  externals: {
-    three: {root: 'THREE', commonjs2: 'three', commonjs: 'three', amd: 'three'},
-    react: {root: 'React', commonjs2: 'react', commonjs: 'react', amd: 'react'}
-  }
+  externals
 };
 
 
-const test = {
-  output: {libraryTarget: 'commonjs2'},
-  module: {loaders}
-};
-
-
-const configs = {development, ghPages, dist, min, test};
+const configs = {development, ghPages, dist, min};
 const build = process.env.BUILD || process.env.NODE_ENV || 'development';
 
 

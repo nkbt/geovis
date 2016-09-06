@@ -57,12 +57,9 @@ export const remove = (state, {ids = []}) => {
 const addRandom = state => add(state, {attacks: [mkAttack(sample(points), sample(points))]});
 
 
-// const initialState = sampleAttacks
-//  .map(attack => mkAttack(...attack))
-//  .reduce((st, a) => add(st, {attacks: [a]}), {});
-
-
-const initialState = {};
+const initialState = sampleAttacks
+  .map(attack => mkAttack(...attack))
+  .reduce((st, a) => add(st, {attacks: [a]}), {});
 
 
 export const clear = () => ({});

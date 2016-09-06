@@ -23,10 +23,11 @@ const line = path => {
 
   lineObject.tween = new TWEEN.Tween({opacity: 1})
     .to({opacity: 0}, 1000)
-    .interpolation(TWEEN.Interpolation.CatmullRom)
-    .onUpdate(function () {
-      Object.assign(material, {opacity: this.opacity});
-    });
+    .interpolation(TWEEN.Interpolation.CatmullRom);
+  lineObject.updater = function () {
+    Object.assign(material, {opacity: this.opacity});
+  };
+  lineObject.tween.onUpdate(lineObject.updater);
 
   return lineObject;
 };
@@ -72,8 +73,8 @@ export const arc = ({EARTH_RADIUS, POINTS}) => {
         l.tween
           .onComplete(onComplete)
           .start();
-      })
-    }
+      });
+    };
 
     return group;
   };

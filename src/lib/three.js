@@ -83,12 +83,12 @@ export const onCreate = ({
     if (!(id in globeAttacks)) {
       return;
     }
-    const attack = scene.getObjectByName(id);
+    const a = scene.getObjectByName(id);
     const onDestroy = () => {
-      scene.remove(attack);
+      scene.remove(a);
       delete globeAttacks[id];
     };
-    attack.destroy(onDestroy);
+    a.destroy(onDestroy);
   };
 
 
