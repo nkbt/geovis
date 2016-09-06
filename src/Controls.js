@@ -1,6 +1,7 @@
 import React from 'react';
 import {shouldComponentUpdate} from 'react/lib/ReactComponentWithPureRenderMixin';
 import {connect} from 'react-redux';
+import {themr} from 'react-css-themr';
 import {ATTACKS_ADD_RANDOM, ATTACKS_CLEAR} from './attacks/reducer';
 import {
   STATE_PAUSED,
@@ -10,11 +11,17 @@ import {
 } from './controls/reducer';
 
 
-import css from './static/Controls.css';
+const css = {
+  controlsContainer: 'GeoVis--Controls--container',
+  controlsOpened: 'GeoVis--Controls--opened',
+  controlsContent: 'GeoVis--Controls--content',
+  controlsToggle: 'GeoVis--Controls--toggle'
+};
 
 
 const ControlsContent = React.createClass({
   propTypes: {
+    theme: React.PropTypes.object,
     controls: React.PropTypes.string.isRequired,
     onAdd: React.PropTypes.func.isRequired,
     onClear: React.PropTypes.func.isRequired,
@@ -38,13 +45,13 @@ const ControlsContent = React.createClass({
 
 
   render() {
-    const {controls, onAdd, onClear, onPlay, onPause} = this.props;
+    const {theme, controls, onAdd, onClear, onPlay, onPause} = this.props;
     const {isOpened} = this.state;
 
     return (
-      <div className={`${css.container} ${isOpened ? css.opened : ''}`}>
-        <div className={css.content}>
-          <span className={css.toggle} onClick={this.onToggle}>
+      <div className={`${theme.controlsContainer} ${isOpened ? theme.controlsOpened : ''}`}>
+        <div className={theme.controlsContent}>
+          <span className={theme.controlsToggle} onClick={this.onToggle}>
             {isOpened ? '>' : '<'}
           </span>
           {controls === STATE_PLAYING ? <button onClick={onPause}>Pause</button> : null}
@@ -73,7 +80,10 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
+const ThemedControls = themr('ThemedControls', css)(ControlsContent);
+
+
 export const Controls = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ControlsContent);
+)(ThemedControls);

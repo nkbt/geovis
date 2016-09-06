@@ -1,4 +1,26 @@
-.container {
+.GeoVis--App--container {
+  position: fixed !important;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.GeoVis--App--content {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.GeoVis--Controls--container {
   position: fixed;
   right: 0;
   bottom: 0;
@@ -15,16 +37,16 @@
   transition: max-width 300ms ease;
 }
 
-.container.opened {
+.GeoVis--Controls--container.GeoVis--Controls--opened {
   max-width: 100%;
   transition-duration: 1000ms;
 }
 
-.content {
+.GeoVis--Controls--content {
   padding: 1em 0.7em 0.7em 3em;
 }
 
-.toggle {
+.GeoVis--Controls--toggle {
   position: absolute;
   top: 0.25em;
   left: 0.5em;
@@ -34,6 +56,6 @@
   line-height: 1em;
 }
 
-.opened .toggle {
+.GeoVis--Controls--opened .GeoVis--Controls--toggle {
   content: '>';
 }

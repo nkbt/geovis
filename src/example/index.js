@@ -4,6 +4,7 @@ import {createStore, combineReducers, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 
 import './reset.css';
+import '../static/geovis.css';
 
 import {App} from '../App';
 
