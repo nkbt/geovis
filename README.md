@@ -14,22 +14,26 @@ React component-wrapper to swap one element with another and back, useful to sho
 
 ### NPM
 ```sh
-npm install --save react geovis
+npm install --save @nkbt/geovis react redux react-redux three
+
 ```
 
-Don't forget to manually install peer dependencies (`react`) if you use npm@3.
+Don't forget to manually install peer dependencies (`react`, `redux`, `react-redux`, `three`) if you use npm@3.
 
 
 ### Bower:
 ```sh
-bower install --save https://unpkg.com/geovis/bower.zip
+bower install --save https://unpkg.com/@nkbt/geovis/bower.zip
 ```
 
 
 ### 1998 Script Tag:
 ```html
-<script src="https://unpkg.com/react/dist/react.js"></script>
-<script src="https://unpkg.com/geovis/build/geovis.js"></script>
+<script src="https://unpkg.com/react/dist/react.min.js"></script>
+<script src="https://unpkg.com/redux/dist/redux.min.js"></script>
+<script src="https://unpkg.com/react-redux/dist/react-redux.min.js"></script>
+<script src="https://unpkg.com/three/build/three.min.js"></script>
+<script src="https://unpkg.com/@nkbt/geovis/build/geovis.js"></script>
 (Module exposed as `GeoVis`)
 ```
 
@@ -48,17 +52,14 @@ bower install --save https://unpkg.com/geovis/bower.zip
 ```js
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {GeoVis} from 'geovis';
+import {App, attacks, controls} from '@nkbt/geovis';
 
-const App = () => (
-  <div>
-    <GeoVis />
-  </div>
-);
+const store = createStore(combineReducers({attacks, controls}));
 
 const appRoot = document.createElement('div');
+appRoot.id = 'app';
 document.body.appendChild(appRoot);
-ReactDOM.render(<App />, appRoot);
+ReactDOM.render(<Provider store={store}><App /></Provider>, appRoot);
 ```
 
 ## Options
