@@ -1,5 +1,5 @@
 {
-  "name": "geovis",
+  "name": "@nkbt/geovis",
   "version": "0.0.0",
   "description": "GeoVis",
   "main": "lib/index.js",

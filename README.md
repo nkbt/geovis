@@ -50,16 +50,20 @@ bower install --save https://unpkg.com/@nkbt/geovis/bower.zip
 
 ## Usage
 ```js
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {App, attacks, controls} from '@nkbt/geovis';
+const React = require('react');
+const ReactDOM = require('react-dom');
+const {createStore, combineReducers} = require('redux');
+const {Provider} = require('react-redux');
+const {App, attacks, controls} = require('@nkbt/geovis');
+
+const el = React.createElement;
 
 const store = createStore(combineReducers({attacks, controls}));
 
 const appRoot = document.createElement('div');
 appRoot.id = 'app';
 document.body.appendChild(appRoot);
-ReactDOM.render(<Provider store={store}><App /></Provider>, appRoot);
+ReactDOM.render(el(Provider, {store}, el(App)), appRoot);
 ```
 
 ## Options
