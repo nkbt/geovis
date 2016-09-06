@@ -10,7 +10,7 @@ import {
 } from './controls/reducer';
 
 
-import css from './Controls.css';
+import css from './static/Controls.css';
 
 
 const ControlsContent = React.createClass({

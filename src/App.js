@@ -8,7 +8,7 @@ import {Adder} from './Adder';
 import {STATE_PLAYING} from './controls/reducer';
 
 
-import css from './App.css';
+import css from './static/App.css';
 
 
 const noop = () => null;

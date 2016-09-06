@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import topojson from 'topojson';
-import world from '../world-110m.json';
+import world from '../static/world-110m.json';
 import {toVector} from './math';
 
 
