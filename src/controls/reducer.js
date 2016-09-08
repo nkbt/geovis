@@ -2,7 +2,7 @@ export const STATE_PAUSED = 'paused';
 export const STATE_PLAYING = 'playing';
 
 
-const initialState = STATE_PAUSED;
+const initialState = STATE_PLAYING;
 
 
 const play = () => STATE_PLAYING;
