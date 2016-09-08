@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {themr} from 'react-css-themr';
 import {Globe} from './Globe';
 import {Controls} from './Controls';
+import {InvisibleControls} from './InvisibleControls';
 import {Remover} from './Remover';
 import {Adder} from './Adder';
 import {STATE_PLAYING} from './controls/reducer';
@@ -60,6 +61,7 @@ const AppContent = React.createClass({
             <div className={theme.appContent}>
               <Globe height={height} width={width} />
               <Controls theme={theme} />
+              <InvisibleControls theme={theme} />
               <Extras />
             </div>
           ) : null

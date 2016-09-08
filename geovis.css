@@ -37,7 +37,7 @@
   padding: 1em;
 }
 
-.GeoVis--Controls--container button {
+.GeoVis--Controls--button {
   margin: 0;
   padding: 0;
   border: none;
@@ -46,4 +46,53 @@
   text-transform: uppercase;
   font-size: inherit;
   cursor: pointer;
+}
+
+.GeoVis--InvisibleControls--container {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  overflow: hidden;
+  max-width: 3em;
+  background: transparent;
+  color: #fff;
+  text-align: right;
+  white-space: nowrap;
+  opacity: 0.5;
+}
+
+.GeoVis--InvisibleControls--container.GeoVis--InvisibleControls--opened {
+  max-width: 100%;
+}
+
+.GeoVis--InvisibleControls--content {
+  padding: 1em 0.7em 0.7em 3em;
+}
+
+.GeoVis--InvisibleControls--toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3em;
+  height: 3em;
+  background: transparent;
+  font-size: 1em;
+  line-height: 3em;
+  cursor: pointer;
+}
+
+.GeoVis--InvisibleControls--button {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.GeoVis--InvisibleControls--button + .GeoVis--InvisibleControls--button {
+  margin-left: 0.5em;
 }
