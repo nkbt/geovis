@@ -28,6 +28,11 @@ const RemoverContent = React.createClass({
   componentWillReceiveProps({attacks}) {
     const {add} = this.diff(attacks);
     add.forEach(this.setTimeout);
+
+    // safeguard, no more then 20 attacks at once
+    const MAX = 20;
+    const ids = Object.keys(attacks);
+    ids.slice(0, ids.length - Math.min(MAX, ids.length)).forEach(this.onRemove);
   },
 
 
