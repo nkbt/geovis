@@ -16,14 +16,7 @@ const points = [
   MOSCOW,
   KYIV
 ];
-const sampleAttacks = [
-  [SYD, NY],
-  [SYD, DARWIN],
-  [KYIV, MOSCOW],
-  [VANCOUVER, NY],
-  [MOSCOW, VANCOUVER],
-  [LONDON, NY]
-];
+
 
 const sample = arr => arr[Math.round(Math.random() * (arr.length - 1))];
 
@@ -57,10 +50,20 @@ export const remove = (state, {ids = []}) => {
 const addRandom = state => add(state, {attacks: [mkAttack(sample(points), sample(points))]});
 
 
-const initialState = sampleAttacks
+const initialState = {};
+
+/*
+const initialState = [
+  [SYD, NY],
+  [SYD, DARWIN],
+  [KYIV, MOSCOW],
+  [VANCOUVER, NY],
+  [MOSCOW, VANCOUVER],
+  [LONDON, NY]
+]
   .map(attack => mkAttack(...attack))
   .reduce((st, a) => add(st, {attacks: [a]}), {});
-
+*/
 
 export const clear = () => ({});
 
