@@ -6,7 +6,6 @@ import {Globe} from './Globe';
 import {Controls} from './Controls';
 import {InvisibleControls} from './InvisibleControls';
 import {Remover} from './Remover';
-import {Adder} from './Adder';
 import {STATE_PLAYING} from './controls/reducer';
 
 
@@ -21,7 +20,6 @@ const noop = () => null;
 
 const ExtrasContent = ({controls}) => (
   <div>
-    {controls === STATE_PLAYING ? <Adder /> : null}
     {controls === STATE_PLAYING ? <Remover /> : null}
   </div>
 );
