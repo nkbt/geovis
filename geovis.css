@@ -22,40 +22,28 @@
 
 .GeoVis--Controls--container {
   position: fixed;
+  top: 0;
   right: 0;
-  bottom: 0;
   z-index: 10000;
   overflow: hidden;
-  max-width: 3em;
   border-top-left-radius: 0.5em;
-  background: rgba(255, 255, 255, 0.3);
   color: #fff;
   text-align: right;
   white-space: nowrap;
-  opacity: 0.3;
-  cursor: pointer;
-  transition: max-width 300ms ease;
-}
-
-.GeoVis--Controls--container.GeoVis--Controls--opened {
-  max-width: 100%;
-  transition-duration: 1000ms;
+  opacity: 0.5;
 }
 
 .GeoVis--Controls--content {
-  padding: 1em 0.7em 0.7em 3em;
+  padding: 1em;
 }
 
-.GeoVis--Controls--toggle {
-  position: absolute;
-  top: 0.25em;
-  left: 0.5em;
-  color: rgba(255, 255, 255, 0.3);
-  content: '<';
-  font-size: 2em;
-  line-height: 1em;
-}
-
-.GeoVis--Controls--opened .GeoVis--Controls--toggle {
-  content: '>';
+.GeoVis--Controls--container button {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: inherit;
+  cursor: pointer;
 }
