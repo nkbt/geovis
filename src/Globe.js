@@ -12,6 +12,7 @@ const GlobeContent = React.createClass({
       srcLon: React.PropTypes.number.isRequired,
       dstLat: React.PropTypes.number.isRequired,
       dstLon: React.PropTypes.number.isRequired,
+      color: React.PropTypes.number,
       value: React.PropTypes.number.isRequired
     })).isRequired,
     width: React.PropTypes.number.isRequired,

@@ -16,13 +16,18 @@ const points = [
   MOSCOW,
   KYIV
 ];
+const colors = [
+  0x33ff33,
+  0xffff33,
+  0xff3333
+];
 
 
 const sample = arr => arr[Math.round(Math.random() * (arr.length - 1))];
 
 export const mkAttack = ([srcLat, srcLon], [dstLat, dstLon]) => ({
   id: `${srcLat}|${srcLon}|${dstLat}|${dstLon}|${performance.now()}`,
-  srcLat, srcLon, dstLat, dstLon, value: rnd(5, 30)
+  srcLat, srcLon, dstLat, dstLon, value: rnd(5, 30), color: sample(colors)
 });
 
 

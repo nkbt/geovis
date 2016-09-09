@@ -5,7 +5,7 @@ import {distance, intermediatePoint} from './math';
 import {rnd, arr} from './utils';
 
 
-const line = path => {
+const line = color => path => {
   const geometry = new THREE.Geometry();
   geometry.vertices = path.getPoints(70);
   geometry.computeLineDistances();
@@ -13,7 +13,7 @@ const line = path => {
   const material = new THREE.LineDashedMaterial({
     dashSize: 1,
     gapSize: rnd(5, 30),
-    color: 0x00ff00,
+    color,
     linewidth: 2,
     transparent: true,
     opacity: 0.9
@@ -42,7 +42,7 @@ export const arc = ({EARTH_RADIUS, POINTS}) => {
   const maxElevationCoefficient = 15 / Math.PI;
 
 
-  return (from, to, width) => {
+  return (from, to, width, color = 0x00ff00) => {
     const dist = distance(from, to, EARTH_RADIUS);
     const maxElevation = Math.sqrt(maxElevationCoefficient * dist);
     const points = midpoints
@@ -54,7 +54,7 @@ export const arc = ({EARTH_RADIUS, POINTS}) => {
         .map(e => e * (maxElevation + i) + EARTH_RADIUS))
       .map(elevations => new THREE.CatmullRomCurve3(points
         .map((p, i) => toVector(p).multiplyScalar(elevations[i]))))
-      .map(line);
+      .map(line(color));
 
     const group = new THREE.Group();
     lines.forEach(l => group.add(l));

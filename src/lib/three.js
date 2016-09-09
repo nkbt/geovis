@@ -98,8 +98,8 @@ export const onCreate = ({
 
 
   const addAttack = attacks => id => {
-    const {srcLat, srcLon, dstLat, dstLon, value} = attacks[id];
-    const obj = attack([srcLat, srcLon], [dstLat, dstLon], value);
+    const {srcLat, srcLon, dstLat, dstLon, color, value} = attacks[id];
+    const obj = attack([srcLat, srcLon], [dstLat, dstLon], value, color);
     obj.name = id;
     globeAttacks[id] = attacks[id];
     scene.add(obj);
