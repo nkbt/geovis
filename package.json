@@ -1,6 +1,6 @@
 {
   "name": "@nkbt/geovis",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "GeoVis",
   "main": "lib/index.js",
   "config": {
