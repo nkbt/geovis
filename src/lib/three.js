@@ -30,14 +30,6 @@ export const onCreate = ({
   width: initialWidth,
   height: initialHeight
 }) => {
-  let stats = {begin: noop, end: noop};
-  if (process.env.NODE_ENV !== 'production') {
-    const Stats = require('stats.js');
-    stats = new Stats();
-    document.body.appendChild(stats.dom);
-    stats.showPanel(0);
-  }
-
   const scene = new THREE.Scene();
 
   const camera = new THREE.PerspectiveCamera(50, initialWidth / initialHeight, 1, 5000);
@@ -65,11 +57,8 @@ export const onCreate = ({
 
   let raf = null;
   const animate = time => {
-    stats.begin();
     TWEEN.update(time);
     render();
-    stats.end();
-
     raf = requestAnimationFrame(animate);
   };
   raf = requestAnimationFrame(animate);

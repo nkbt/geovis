@@ -57,18 +57,6 @@ const addRandom = state => add(state, {attacks: [mkAttack(sample(points), sample
 
 const initialState = {};
 
-/*
-const initialState = [
-  [SYD, NY],
-  [SYD, DARWIN],
-  [KYIV, MOSCOW],
-  [VANCOUVER, NY],
-  [MOSCOW, VANCOUVER],
-  [LONDON, NY]
-]
-  .map(attack => mkAttack(...attack))
-  .reduce((st, a) => add(st, {attacks: [a]}), {});
-*/
 
 export const clear = () => ({});
 
