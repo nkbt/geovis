@@ -13,15 +13,10 @@ const EARTH_RADIUS = 200;
 const OrbitControls = orbitControls(THREE);
 
 
-const SYD = [-33.865143, 151.209900];
+const NY = [40.730610, -73.935242];
 
 
 const attack = arc({EARTH_RADIUS, POINTS: 9});
-
-
-const noop = () => {
-  // empty
-};
 
 
 export const onCreate = ({
@@ -33,8 +28,8 @@ export const onCreate = ({
   const scene = new THREE.Scene();
 
   const camera = new THREE.PerspectiveCamera(50, initialWidth / initialHeight, 1, 5000);
-  camera.position.copy(toVector(SYD).multiplyScalar(EARTH_RADIUS * 4));
-  camera.lookAt(toVector(SYD).multiplyScalar(EARTH_RADIUS));
+  camera.position.copy(toVector(NY).multiplyScalar(EARTH_RADIUS * 4));
+  camera.lookAt(toVector(NY).multiplyScalar(EARTH_RADIUS));
 
   const controls = new OrbitControls(camera, canvas);
   controls.minDistance = 350;
@@ -122,6 +117,22 @@ export const onCreate = ({
   // Initial render
   onUpdate({attacks: initialAttacks, width: initialWidth, height: initialHeight});
 
+
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 1.0;
+
+
+  let autorotateTimeout;
+  controls.addEventListener('start', () => {
+    clearTimeout(autorotateTimeout);
+    controls.autoRotate = false;
+  });
+
+  controls.addEventListener('end', () => (
+    autorotateTimeout = setTimeout(() => (
+      controls.autoRotate = true
+    ), 5000)
+  ));
 
   return {onDestroy, onUpdate};
 };
