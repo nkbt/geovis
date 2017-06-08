@@ -60,7 +60,7 @@ const AppContent = React.createClass({
               <Globe height={height} width={width} />
               <Controls theme={theme} />
               <InvisibleControls theme={theme} />
-              <Extras />
+              {/*<Extras />*/}
             </div>
           ) : null
         )}

@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import TWEEN from 'tween.js';
 import orbitControls from 'three-orbit-controls';
 import {map} from './map';
+import {arc} from './arc';
+import {differ} from './differ';
 
 
 import {bbox} from '../../world.json';
@@ -18,9 +20,11 @@ const getScale = (width, height) =>
     height / (mapBottom - mapTop) :
     width / (mapRight - mapLeft));
 
+const attack = arc({EARTH_RADIUS: 200, POINTS: 9});
 
 export const onCreate = ({
   element: canvas,
+  attacks: initialAttacks,
   width: initialWidth,
   height: initialHeight
 }) => {
@@ -34,7 +38,6 @@ export const onCreate = ({
 
   const initialScale = getScale(initialWidth, initialHeight);
   camera.zoom = initialScale;
-  camera.updateProjectionMatrix();
 
 
   const controls = new OrbitControls(camera, canvas);
@@ -55,6 +58,7 @@ export const onCreate = ({
   const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: false});
   renderer.setSize(initialWidth, initialHeight);
 
+
   const render = () => {
     controls.update();
     renderer.render(scene, camera);
@@ -69,7 +73,50 @@ export const onCreate = ({
   raf = requestAnimationFrame(animate);
 
 
-  const onUpdate = ({width, height}) => {
+  const globeAttacks = {};
+  const diff = differ(globeAttacks);
+
+
+  const removeAttack = id => {
+    if (!(id in globeAttacks)) {
+      return;
+    }
+    const a = scene.getObjectByName(id);
+    const onDestroy = () => {
+      scene.remove(a);
+      delete globeAttacks[id];
+    };
+    a.destroy(onDestroy);
+  };
+
+
+  const updateAttack = attacks => id => {
+    globeAttacks[id].value = attacks[id].value;
+  };
+
+
+  const addAttack = attacks => id => {
+    const {srcLat, srcLon, dstLat, dstLon, color, value} = attacks[id];
+    const obj = attack([srcLat, srcLon], [dstLat, dstLon], value, color);
+    obj.name = id;
+    globeAttacks[id] = attacks[id];
+    scene.add(obj);
+  };
+
+
+  const onUpdate = ({attacks, width, height}) => {
+    const adder = addAttack(attacks);
+    const updater = updateAttack(attacks);
+    const remover = removeAttack;
+
+    const {add, remove, update} = diff(attacks);
+
+    // mutate
+    remove.forEach(remover);
+    update.forEach(updater);
+    add.forEach(adder);
+
+    // update camera
     const scale = getScale(width, height);
     camera.zoom = scale;
     controls.minZoom = scale;
@@ -86,7 +133,12 @@ export const onCreate = ({
 
   const onDestroy = () => {
     cancelAnimationFrame(raf);
+    Object.keys(globeAttacks).forEach(id => clearTimeout(globeAttacks[id]));
   };
+
+
+  // Initial render
+  onUpdate({attacks: initialAttacks, width: initialWidth, height: initialHeight});
 
   return {onDestroy, onUpdate};
 };

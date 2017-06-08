@@ -8,7 +8,7 @@ import '../../geovis.css';
 
 import {App} from '../App';
 
-import {attacks} from '../attacks/reducer';
+import {attacks, ATTACKS_ADD_RANDOM} from '../attacks/reducer';
 import {controls} from '../controls/reducer';
 
 
@@ -24,6 +24,12 @@ const middleware = process.env.NODE_ENV === 'production' ?
     })
   );
 const store = createStore(rootReducer, {}, middleware);
+store.dispatch({type: ATTACKS_ADD_RANDOM});
+store.dispatch({type: ATTACKS_ADD_RANDOM});
+store.dispatch({type: ATTACKS_ADD_RANDOM});
+store.dispatch({type: ATTACKS_ADD_RANDOM});
+store.dispatch({type: ATTACKS_ADD_RANDOM});
+store.dispatch({type: ATTACKS_ADD_RANDOM});
 
 
 const appRoot = document.createElement('div');
