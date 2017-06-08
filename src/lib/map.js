@@ -8,38 +8,9 @@ const blacklist = ['AQ'];
 const countries = feature(world, world.objects.countries).features
   .filter(({properties: {cc}}) => !blacklist.includes(cc));
 
-const [mapLeft, mapTop, mapRight, mapBottom] = world.bbox;
-const ASPECT = (mapRight - mapLeft) / (mapBottom - mapTop);
-console.log(`ASPECT`, ASPECT)
+export const map = () => {
 
-//  const aspect = maxWidth / maxHeight;
-//  const width = aspect > ASPECT ? maxHeight * ASPECT : maxWidth;
-//  const height = aspect > ASPECT ? maxHeight : maxWidth / ASPECT;
-
-
-
-export const map = ({width: maxWidth, height: maxHeight}) => {
-  const aspect = maxWidth / maxHeight;
-  const width = aspect > ASPECT ? maxHeight * ASPECT : maxWidth;
-  const height = aspect > ASPECT ? maxHeight : maxWidth / ASPECT;
-
-
-  const [
-    screenLeft, screenTop, screenRight, screenBottom
-  ] = [width / -2, height / -2, width / 2, height / 2];
-
-
-  const toVector = ([lat, lng]) => {
-    const x = lng >= 0 ?
-      lng * screenRight / mapRight :
-      lng * screenLeft / mapLeft;
-
-    const z = lat >= 0 ?
-      lat * screenTop / mapTop :
-      lat * screenBottom / mapBottom;
-
-    return new THREE.Vector3(x, 0, z);
-  };
+  const toVector = ([lat, lng]) => new THREE.Vector3(lng, 0, lat);
 
   const material = new THREE.LineBasicMaterial({color: 0x666666, linewidth: 2});
 
