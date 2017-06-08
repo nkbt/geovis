@@ -1,81 +1,46 @@
 import * as THREE from 'three';
 import TWEEN from 'tween.js';
-import {toVector} from './math';
-import {distance, intermediatePoint} from './math';
-import {rnd, arr} from './utils';
 
 
-const line = color => path => {
+export const line = ([fromLat, fromLng], [toLat, toLng], width, color = 0x00ff00) => {
+  const group = new THREE.Group();
+  const material = new THREE.LineBasicMaterial({color, transparent: true, opacity: 0});
   const geometry = new THREE.Geometry();
-  geometry.vertices = path.getPoints(70);
-  geometry.computeLineDistances();
+  geometry.vertices.push(
+    new THREE.Vector3(fromLng, 0, fromLat),
+    new THREE.Vector3(toLng, 0, toLat)
+  );
+  const attack = new THREE.Line(geometry, material);
 
-  const material = new THREE.LineDashedMaterial({
-    dashSize: 1,
-    gapSize: rnd(5, 30),
-    color,
-    linewidth: 2,
-    transparent: true,
-    opacity: 0.9
-  });
-
-  const lineObject = new THREE.Line(geometry, material);
-
-  lineObject.tween = new TWEEN.Tween({opacity: 1})
+  attack.fadeOut = new TWEEN.Tween({opacity: 1})
     .to({opacity: 0}, 1000)
     .interpolation(TWEEN.Interpolation.CatmullRom);
-  lineObject.updater = function () {
+  attack.fadeIn = new TWEEN.Tween({opacity: 0})
+    .to({opacity: 1}, 1000)
+    .interpolation(TWEEN.Interpolation.CatmullRom);
+  attack.updater = function () {
     Object.assign(material, {opacity: this.opacity});
   };
-  lineObject.tween.onUpdate(lineObject.updater);
+  attack.fadeOut.onUpdate(attack.updater);
+  attack.fadeIn.onUpdate(attack.updater);
+  group.add(attack);
 
-  return lineObject;
-};
+  attack.fadeIn.start();
 
-
-export const arc = ({EARTH_RADIUS, POINTS}) => {
-  const midpoints = [0].concat((new Array(POINTS - 1)).join('.').split('.')
-    .map((_, i) => (i + 1) / (POINTS - 1)));
-
-
-  const elevationCoefficients = midpoints.map(p => p === 1 ? 0 : Math.sin(Math.PI * p));
-  const maxElevationCoefficient = 15 / Math.PI;
-
-
-  return (from, to, width, color = 0x00ff00) => {
-    const dist = distance(from, to, EARTH_RADIUS);
-    const maxElevation = Math.sqrt(maxElevationCoefficient * dist);
-    const points = midpoints
-      .map(p => intermediatePoint(from, to, p));
-
-
-    const lines = arr(width)
-      .map(i => elevationCoefficients
-        .map(e => e * (maxElevation + i) + EARTH_RADIUS))
-      .map(elevations => new THREE.CatmullRomCurve3(points
-        .map((p, i) => toVector(p).multiplyScalar(elevations[i]))))
-      .map(line(color));
-
-    const group = new THREE.Group();
-    lines.forEach(l => group.add(l));
-
-    group.destroy = callback => {
-      let all = group.children.length;
-      const onComplete = () => {
-        all = all - 1;
-        if (all > 0) {
-          return;
-        }
-        callback();
-      };
-
-      group.children.forEach(l => {
-        l.tween
-          .onComplete(onComplete)
-          .start();
-      });
+  group.destroy = callback => {
+    let all = group.children.length;
+    const onComplete = () => {
+      all = all - 1;
+      if (all > 0) {
+        return;
+      }
+      callback();
     };
-
-    return group;
+    group.children.forEach(l => {
+      l.fadeIn.stop();
+      l.fadeOut.onComplete(onComplete).start();
+    });
   };
+
+  return group;
 };

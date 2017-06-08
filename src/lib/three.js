@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import TWEEN from 'tween.js';
 import orbitControls from 'three-orbit-controls';
 import {map} from './map';
-import {arc} from './arc';
+import {line} from './line';
 import {differ} from './differ';
 
 
@@ -20,7 +20,6 @@ const getScale = (width, height) =>
     height / (mapBottom - mapTop) :
     width / (mapRight - mapLeft));
 
-const attack = arc({EARTH_RADIUS: 200, POINTS: 9});
 
 export const onCreate = ({
   element: canvas,
@@ -97,7 +96,7 @@ export const onCreate = ({
 
   const addAttack = attacks => id => {
     const {srcLat, srcLon, dstLat, dstLon, color, value} = attacks[id];
-    const obj = attack([srcLat, srcLon], [dstLat, dstLon], value, color);
+    const obj = line([srcLat, srcLon], [dstLat, dstLon], value, color);
     obj.name = id;
     globeAttacks[id] = attacks[id];
     scene.add(obj);
