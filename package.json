@@ -9,8 +9,6 @@
   "scripts": {
     "start": "react-component-template",
     "test": "npm start test",
-    "precommit": "true || npm start precommit",
-    "prepush": "true || npm start prepush",
     "postversion": "npm start postversion",
     "prepublish": "npm start prepublish"
   },
@@ -39,6 +37,7 @@
     "url-loader": "0.5.7"
   },
   "dependencies": {
+    "earcut": "2.1.1",
     "react-bulkhead": "2.1.0",
     "react-css-themr": "2.1.2",
     "react-element-resize": "0.2.1",
