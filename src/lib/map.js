@@ -73,12 +73,26 @@ export const map = () => {
     geometry.computeFaceNormals();
     geometry.computeVertexNormals();
 
-    group.add(new THREE.Mesh(geometry, meshMaterial));
+    const mesh = new THREE.Mesh(geometry, meshMaterial.clone());
+    group.add(mesh);
 
     const lineGeometry = new THREE.Geometry();
     lineGeometry.vertices = vertices;
     const line = new THREE.Line(lineGeometry, lineMaterial);
     group.add(line);
+
+
+    group.select = () => {
+      group.selected = true;
+      mesh.material.color.set(0x1D242A);
+    };
+
+    group.deselect = () => {
+      group.selected = false;
+      mesh.material.color.set(0x181f26);
+    };
+
+    group.click = () => group.selected ? group.deselect() : group.select();
 
     return group;
   };

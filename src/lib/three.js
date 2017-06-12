@@ -26,7 +26,8 @@ export const onCreate = ({
   element: canvas,
   attacks: initialAttacks,
   width: initialWidth,
-  height: initialHeight
+  height: initialHeight,
+  onSelectCountry
 }) => {
   const scene = new THREE.Scene();
   const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -69,6 +70,26 @@ export const onCreate = ({
   renderer.setSize(initialWidth, initialHeight);
   renderer.setClearColor(0x000000);
 
+
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+  const onClick = event => {
+    mouse.set(
+      (event.clientX / (camera.right - camera.left)) * 2 - 1,
+      -(event.clientY / (camera.top - camera.bottom)) * 2 + 1
+    );
+    raycaster.setFromCamera(mouse, camera);
+    const [intersected] = raycaster.intersectObject(mapGroup, true);
+    if (intersected) {
+      const {object: {parent: country}} = intersected;
+      country.click();
+      onSelectCountry(country.name);
+    }
+  };
+
+  document.addEventListener('mousedown', onClick, false);
+
+
   const render = () => {
     controls.update();
     renderer.render(scene, camera);
@@ -76,9 +97,10 @@ export const onCreate = ({
 
   let raf = null;
   const animate = time => {
+    raf = requestAnimationFrame(animate);
+
     TWEEN.update(time);
     render();
-    raf = requestAnimationFrame(animate);
   };
   raf = requestAnimationFrame(animate);
 
@@ -144,6 +166,7 @@ export const onCreate = ({
   const onDestroy = () => {
     cancelAnimationFrame(raf);
     Object.keys(globeAttacks).forEach(id => clearTimeout(globeAttacks[id]));
+    document.removeEventListener('mousedown', onClick, false);
   };
 
 
