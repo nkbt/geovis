@@ -15,10 +15,11 @@ const OrbitControls = orbitControls(THREE);
 
 
 // Give some slight padding around map
-const getScale = (width, height) =>
+const getScale = (width, height) => (
   0.98 * (width / height > ASPECT ?
     height / (mapBottom - mapTop) :
-    width / (mapRight - mapLeft));
+    width / (mapRight - mapLeft))
+);
 
 
 export const onCreate = ({
@@ -28,15 +29,23 @@ export const onCreate = ({
   height: initialHeight
 }) => {
   const scene = new THREE.Scene();
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(0, 0, 100);
+  scene.add(light);
+
 
   const camera = new THREE.OrthographicCamera(
     initialWidth / -2,
     initialWidth / 2,
-    initialHeight / -2,
-    initialHeight / 2);
+    initialHeight / 2,
+    initialHeight / -2);
+  camera.position.set(0, 0, 100);
+
 
   const initialScale = getScale(initialWidth, initialHeight);
   camera.zoom = initialScale;
+
+  camera.updateProjectionMatrix();
 
 
   const controls = new OrbitControls(camera, canvas);
@@ -51,12 +60,14 @@ export const onCreate = ({
   controls.enableDamping = true;
 
 
-  map({width: initialWidth, height: initialHeight})
-    .map(mesh => scene.add(mesh));
+  const mapGroup = map();
+  scene.add(mapGroup);
+  light.target = mapGroup;
+
 
   const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: false});
   renderer.setSize(initialWidth, initialHeight);
-
+  renderer.setClearColor(0x000000);
 
   const render = () => {
     controls.update();
@@ -125,8 +136,8 @@ export const onCreate = ({
 
     camera.left = width / -2;
     camera.right = width / 2;
-    camera.top = height / -2;
-    camera.bottom = height / 2;
+    camera.top = height / 2;
+    camera.bottom = height / -2;
     camera.updateProjectionMatrix();
   };
 

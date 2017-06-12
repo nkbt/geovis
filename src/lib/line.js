@@ -2,13 +2,13 @@ import * as THREE from 'three';
 import TWEEN from 'tween.js';
 
 
-export const line = ([fromLat, fromLng], [toLat, toLng], width, color = 0x00ff00) => {
+export const line = ([srcLat, srcLon], [dstLat, dstLon], width, color = 0x00ff00) => {
   const group = new THREE.Group();
   const material = new THREE.LineBasicMaterial({color, transparent: true, opacity: 0});
   const geometry = new THREE.Geometry();
   geometry.vertices.push(
-    new THREE.Vector3(fromLng, 0, fromLat),
-    new THREE.Vector3(toLng, 0, toLat)
+    new THREE.Vector3(srcLon, srcLat, 0),
+    new THREE.Vector3(dstLon, dstLat, 0)
   );
   const attack = new THREE.Line(geometry, material);
 
