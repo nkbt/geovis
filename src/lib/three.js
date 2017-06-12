@@ -27,7 +27,8 @@ export const onCreate = ({
   attacks: initialAttacks,
   width: initialWidth,
   height: initialHeight,
-  onSelectCountry
+  onCountrySelect,
+  onCountryDeselect
 }) => {
   const scene = new THREE.Scene();
   const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -82,12 +83,15 @@ export const onCreate = ({
     const [intersected] = raycaster.intersectObject(mapGroup, true);
     if (intersected) {
       const {object: {parent: country}} = intersected;
-      country.click();
-      onSelectCountry(country.name);
+      if (country.selected) {
+        country.deselect();
+        onCountryDeselect(country.name);
+      } else {
+        country.select();
+        onCountrySelect(country.name);
+      }
     }
   };
-
-  document.addEventListener('mousedown', onClick, false);
 
 
   const render = () => {
@@ -109,13 +113,18 @@ export const onCreate = ({
   const diff = differ(globeAttacks);
 
 
+  const attacksGroup = new THREE.Group();
+  attacksGroup.name = 'attacks';
+  scene.add(attacksGroup);
+
+
   const removeAttack = id => {
     if (!(id in globeAttacks)) {
       return;
     }
-    const a = scene.getObjectByName(id);
+    const a = attacksGroup.getObjectByName(id);
     const onDestroy = () => {
-      scene.remove(a);
+      attacksGroup.remove(a);
       delete globeAttacks[id];
     };
     a.destroy(onDestroy);
@@ -132,7 +141,7 @@ export const onCreate = ({
     const obj = line([srcLat, srcLon], [dstLat, dstLon], value, color);
     obj.name = id;
     globeAttacks[id] = attacks[id];
-    scene.add(obj);
+    attacksGroup.add(obj);
   };
 
 
@@ -163,6 +172,8 @@ export const onCreate = ({
     camera.updateProjectionMatrix();
   };
 
+
+  document.addEventListener('mousedown', onClick, false);
   const onDestroy = () => {
     cancelAnimationFrame(raf);
     Object.keys(globeAttacks).forEach(id => clearTimeout(globeAttacks[id]));

@@ -92,8 +92,6 @@ export const map = () => {
       mesh.material.color.set(0x181f26);
     };
 
-    group.click = () => group.selected ? group.deselect() : group.select();
-
     return group;
   };
 
