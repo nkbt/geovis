@@ -4,12 +4,21 @@ import TWEEN from 'tween.js';
 
 export const line = ([srcLat, srcLon], [dstLat, dstLon], width, color = 0x00ff00) => {
   const group = new THREE.Group();
-  const material = new THREE.LineBasicMaterial({color, transparent: true, opacity: 0});
+  const material = new THREE.LineDashedMaterial({
+    dashSize: 2,
+    gapSize: 2,
+    color,
+    linewidth: 1,
+    transparent: true,
+    opacity: 0,
+    scale: 1.2
+  });
   const geometry = new THREE.Geometry();
   geometry.vertices.push(
     new THREE.Vector3(srcLon, srcLat, 0),
     new THREE.Vector3(dstLon, dstLat, 0)
   );
+  geometry.computeLineDistances();
   const attack = new THREE.Line(geometry, material);
 
   attack.fadeOut = new TWEEN.Tween({opacity: 1})
