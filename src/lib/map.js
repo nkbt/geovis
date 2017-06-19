@@ -48,7 +48,7 @@ export const map = () => {
   });
   const meshMaterial = new THREE.MeshLambertMaterial({color: 0x181f26});
 
-  const normal = new THREE.Vector3(0, 1, 0);
+  const normal = new THREE.Vector3(0, 0, 1);
   const color = new THREE.Color(0xffffff);
 
 
@@ -85,11 +85,13 @@ export const map = () => {
     group.select = () => {
       group.selected = true;
       mesh.material.color.set(0x1D242A);
+      return group.name;
     };
 
     group.deselect = () => {
       group.selected = false;
       mesh.material.color.set(0x181f26);
+      return group.name;
     };
 
     return group;
@@ -98,6 +100,11 @@ export const map = () => {
 
   const mapGroup = new THREE.Group();
   allCountries.map(threeCountry).forEach(country => mapGroup.add(country));
+
+  mapGroup.clearSelection = () =>
+    mapGroup.children
+      .filter(country => country.selected)
+      .map(country => country.deselect());
 
   return mapGroup;
 };

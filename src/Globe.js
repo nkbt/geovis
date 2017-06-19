@@ -5,6 +5,9 @@ import {ReactBulkhead} from 'react-bulkhead';
 import {onCreate} from './lib/three';
 
 
+const onCountrySelect = cc => console.log('SELECT', cc);
+const onCountryDeselect = cc => console.log('DESELECT', cc);
+
 const GlobeContent = React.createClass({
   propTypes: {
     attacks: React.PropTypes.objectOf(React.PropTypes.shape({
@@ -31,6 +34,8 @@ const GlobeContent = React.createClass({
         attacks={attacks}
         width={width}
         height={height}
+        onCountrySelect={onCountrySelect}
+        onCountryDeselect={onCountryDeselect}
         onCreate={onCreate} />
     );
   }

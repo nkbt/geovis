@@ -37,6 +37,7 @@ void main() {
 const vertexShader = `
 uniform float scale;
 attribute float lineDistance;
+uniform float time;
 
 varying float vLineDistance;
 
@@ -46,7 +47,7 @@ varying float vLineDistance;
 void main() {
   #include <color_vertex>
 
-  vLineDistance = scale * lineDistance;
+  vLineDistance = scale * lineDistance - time / 200.0;
 
   vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
   gl_Position = projectionMatrix * mvPosition;
@@ -64,7 +65,8 @@ export const line = ([srcLat, srcLon], [dstLat, dstLon], width, color = 0x00ff00
         dashSize: {value: 2},
         totalSize: {value: 4},
         diffuse: {value: new THREE.Color(color)},
-        opacity: 0
+        opacity: 0,
+        time: {value: 0}
       }
     ]),
     vertexShader,
@@ -90,6 +92,9 @@ export const line = ([srcLat, srcLon], [dstLat, dstLon], width, color = 0x00ff00
   };
   attack.fadeOut.onUpdate(attack.updater);
   attack.fadeIn.onUpdate(attack.updater);
+
+  attack.update = ({time}) => Object.assign(material.uniforms.time, {value: time});
+
   group.add(attack);
 
   attack.fadeIn.start();
@@ -108,6 +113,8 @@ export const line = ([srcLat, srcLon], [dstLat, dstLon], width, color = 0x00ff00
       l.fadeOut.onComplete(onComplete).start();
     });
   };
+
+  group.update = props => group.children.forEach(l => l.update(props));
 
   return group;
 };

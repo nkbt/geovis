@@ -67,6 +67,11 @@ export const onCreate = ({
   light.target = mapGroup;
 
 
+  const attacksGroup = new THREE.Group();
+  attacksGroup.name = 'attacks';
+  scene.add(attacksGroup);
+
+
   const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: false});
   renderer.setSize(initialWidth, initialHeight);
   renderer.setClearColor(0x000000);
@@ -84,12 +89,12 @@ export const onCreate = ({
     if (intersected) {
       const {object: {parent: country}} = intersected;
       if (country.selected) {
-        country.deselect();
-        onCountryDeselect(country.name);
+        onCountryDeselect([country.deselect()]);
       } else {
-        country.select();
-        onCountrySelect(country.name);
+        onCountrySelect([country.select()]);
       }
+    } else {
+      onCountryDeselect(mapGroup.clearSelection());
     }
   };
 
@@ -99,10 +104,11 @@ export const onCreate = ({
     renderer.render(scene, camera);
   };
 
+
   let raf = null;
   const animate = time => {
     raf = requestAnimationFrame(animate);
-
+    attacksGroup.children.forEach(a => a.update({time}));
     TWEEN.update(time);
     render();
   };
@@ -111,11 +117,6 @@ export const onCreate = ({
 
   const globeAttacks = {};
   const diff = differ(globeAttacks);
-
-
-  const attacksGroup = new THREE.Group();
-  attacksGroup.name = 'attacks';
-  scene.add(attacksGroup);
 
 
   const removeAttack = id => {
