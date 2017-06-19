@@ -14,26 +14,22 @@ varying float vLineDistance;
 #include <color_pars_fragment>
 
 void main() {
+  if (mod(vLineDistance, totalSize) > dashSize) {
+    discard;
+  }
 
-	if ( mod( vLineDistance, totalSize ) > dashSize ) {
+  vec3 outgoingLight = vec3(0.0);
+  vec4 diffuseColor = vec4(diffuse, opacity);
 
-		discard;
+  #include <color_fragment>
 
-	}
+  outgoingLight = diffuseColor.rgb; // simple shader
 
-	vec3 outgoingLight = vec3( 0.0 );
-	vec4 diffuseColor = vec4( diffuse, opacity );
+  gl_FragColor = vec4(outgoingLight, diffuseColor.a);
 
-	#include <color_fragment>
-
-	outgoingLight = diffuseColor.rgb; // simple shader
-
-	gl_FragColor = vec4( outgoingLight, diffuseColor.a );
-
-	#include <premultiplied_alpha_fragment>
-	#include <tonemapping_fragment>
-	#include <encodings_fragment>
-
+  #include <premultiplied_alpha_fragment>
+  #include <tonemapping_fragment>
+  #include <encodings_fragment>
 }
 `;
 
@@ -48,14 +44,12 @@ varying float vLineDistance;
 #include <color_pars_vertex>
 
 void main() {
+  #include <color_vertex>
 
-	#include <color_vertex>
+  vLineDistance = scale * lineDistance;
 
-	vLineDistance = scale * lineDistance;
-
-	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-	gl_Position = projectionMatrix * mvPosition;
-
+  vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+  gl_Position = projectionMatrix * mvPosition;
 }
 `;
 
