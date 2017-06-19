@@ -12,13 +12,8 @@ varying float vLineDistance;
 
 #include <common>
 #include <color_pars_fragment>
-#include <fog_pars_fragment>
-#include <logdepthbuf_pars_fragment>
-#include <clipping_planes_pars_fragment>
 
 void main() {
-
-	#include <clipping_planes_fragment>
 
 	if ( mod( vLineDistance, totalSize ) > dashSize ) {
 
@@ -29,7 +24,6 @@ void main() {
 	vec3 outgoingLight = vec3( 0.0 );
 	vec4 diffuseColor = vec4( diffuse, opacity );
 
-	#include <logdepthbuf_fragment>
 	#include <color_fragment>
 
 	outgoingLight = diffuseColor.rgb; // simple shader
@@ -39,7 +33,6 @@ void main() {
 	#include <premultiplied_alpha_fragment>
 	#include <tonemapping_fragment>
 	#include <encodings_fragment>
-	#include <fog_fragment>
 
 }
 `;
@@ -53,9 +46,6 @@ varying float vLineDistance;
 
 #include <common>
 #include <color_pars_vertex>
-#include <fog_pars_vertex>
-#include <logdepthbuf_pars_vertex>
-#include <clipping_planes_pars_vertex>
 
 void main() {
 
@@ -65,10 +55,6 @@ void main() {
 
 	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
 	gl_Position = projectionMatrix * mvPosition;
-
-	#include <logdepthbuf_vertex>
-	#include <clipping_planes_vertex>
-	#include <fog_vertex>
 
 }
 `;
