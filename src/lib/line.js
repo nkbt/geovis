@@ -1,17 +1,95 @@
 import * as THREE from 'three';
 import TWEEN from 'tween.js';
 
+const fragmentShader = `
+uniform vec3 diffuse;
+uniform float opacity;
+
+uniform float dashSize;
+uniform float totalSize;
+
+varying float vLineDistance;
+
+#include <common>
+#include <color_pars_fragment>
+#include <fog_pars_fragment>
+#include <logdepthbuf_pars_fragment>
+#include <clipping_planes_pars_fragment>
+
+void main() {
+
+	#include <clipping_planes_fragment>
+
+	if ( mod( vLineDistance, totalSize ) > dashSize ) {
+
+		discard;
+
+	}
+
+	vec3 outgoingLight = vec3( 0.0 );
+	vec4 diffuseColor = vec4( diffuse, opacity );
+
+	#include <logdepthbuf_fragment>
+	#include <color_fragment>
+
+	outgoingLight = diffuseColor.rgb; // simple shader
+
+	gl_FragColor = vec4( outgoingLight, diffuseColor.a );
+
+	#include <premultiplied_alpha_fragment>
+	#include <tonemapping_fragment>
+	#include <encodings_fragment>
+	#include <fog_fragment>
+
+}
+`;
+
+
+const vertexShader = `
+uniform float scale;
+attribute float lineDistance;
+
+varying float vLineDistance;
+
+#include <common>
+#include <color_pars_vertex>
+#include <fog_pars_vertex>
+#include <logdepthbuf_pars_vertex>
+#include <clipping_planes_pars_vertex>
+
+void main() {
+
+	#include <color_vertex>
+
+	vLineDistance = scale * lineDistance;
+
+	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+	gl_Position = projectionMatrix * mvPosition;
+
+	#include <logdepthbuf_vertex>
+	#include <clipping_planes_vertex>
+	#include <fog_vertex>
+
+}
+`;
 
 export const line = ([srcLat, srcLon], [dstLat, dstLon], width, color = 0x00ff00) => {
   const group = new THREE.Group();
-  const material = new THREE.LineDashedMaterial({
-    dashSize: 2,
-    gapSize: 2,
-    color,
-    linewidth: 1,
-    transparent: true,
-    opacity: 0,
-    scale: 1.2
+  const material = new THREE.ShaderMaterial({
+    uniforms: THREE.UniformsUtils.merge([
+      THREE.UniformsLib.common,
+      THREE.UniformsLib.fog,
+      {
+        scale: {value: 1.2},
+        dashSize: {value: 2},
+        totalSize: {value: 4},
+        diffuse: {value: new THREE.Color(color)},
+        opacity: 0
+      }
+    ]),
+    vertexShader,
+    fragmentShader,
+    transparent: true
   });
   const geometry = new THREE.Geometry();
   geometry.vertices.push(
@@ -28,7 +106,7 @@ export const line = ([srcLat, srcLon], [dstLat, dstLon], width, color = 0x00ff00
     .to({opacity: 1}, 1000)
     .interpolation(TWEEN.Interpolation.CatmullRom);
   attack.updater = function () {
-    Object.assign(material, {opacity: this.opacity});
+    Object.assign(material.uniforms.opacity, {value: this.opacity});
   };
   attack.fadeOut.onUpdate(attack.updater);
   attack.fadeIn.onUpdate(attack.updater);
