@@ -80,10 +80,10 @@ export const onCreate = ({
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
   const onClick = event => {
-    mouse.set(
-      (event.clientX / (camera.right - camera.left)) * 2 - 1,
-      -(event.clientY / (camera.top - camera.bottom)) * 2 + 1
-    );
+    // Only react on left button click
+    if (event.button !== 0) {
+      return;
+    }
     raycaster.setFromCamera(mouse, camera);
     const [intersected] = raycaster.intersectObject(mapGroup, true);
     if (intersected) {
@@ -96,6 +96,15 @@ export const onCreate = ({
     } else {
       onCountryDeselect(mapGroup.clearSelection());
     }
+  };
+
+
+
+  const onMouseMove = event => {
+    mouse.set(
+      (event.clientX / (camera.right - camera.left)) * 2 - 1,
+      -(event.clientY / (camera.top - camera.bottom)) * 2 + 1
+    );
   };
 
 
@@ -174,11 +183,13 @@ export const onCreate = ({
   };
 
 
-  document.addEventListener('mousedown', onClick, false);
+  document.addEventListener('click', onClick, false);
+  document.addEventListener('mousemove', onMouseMove, false);
   const onDestroy = () => {
     cancelAnimationFrame(raf);
     Object.keys(globeAttacks).forEach(id => clearTimeout(globeAttacks[id]));
-    document.removeEventListener('mousedown', onClick, false);
+    document.removeEventListener('click', onClick, false);
+    document.removeEventListener('mousemove', onMouseMove, false);
   };
 
 
